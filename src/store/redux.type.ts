@@ -8,7 +8,8 @@ export interface RootReduxState {
   UserSlice: UserType;
   userSelectedProductListSlice: userCartProductsType;
   userShippingDetailsSlice: userShippingDataType;
-  userPaymentDetailsSlice: userPaymentDetailsType
+  userPaymentDetailsSlice: userPaymentDetailsType;
+  allMenuAndProductListSlice: any;
 
 }
 export type AppDispatch = ThunkDispatch<RootReduxState, unknown, Action<string>>;

@@ -1,20 +1,28 @@
 export interface productsType {
   id: number
   productName: string
-  productImages: productImage[]
+  productImages: string[]
   productDescription: string[]
   productOriginalPrice: number
   productCurrentPrice: number
-  gender: number
-  category: number
-  brand: number
+  brand: {
+    id: number,
+    name: string,
+    slug: string
+  },
+  gender: {
+    id: number,
+    name: string,
+    slug: string
+  },
+  category: {
+    id: number,
+    name: string,
+    slug: string
+  },
   size: number[]
   color: number[]
   reviewRate: number,
-  slug: string
-}
-
-export interface productImage {
-  id: number
-  productImage: string
+  slug: string,
+  type: number
 }
