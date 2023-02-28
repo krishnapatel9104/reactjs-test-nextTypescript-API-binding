@@ -11,32 +11,29 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { restoreUserSelectedProductList } from "../../../src/store/reducers/userSelectedProductList/userSelectedProductList.slice";
 import Image from "next/image";
 import { useRouter } from "next/router";
-// import { genderLists } from "../../data/genderLists";
-// import { categoryLists } from "../../data/categoryLists";
-// import { brandLists } from "../../data/brandLists";
 import { useDispatch, useSelector } from "../../store";
-import {
-    getAllBrandLists,
-    getAllCategoryLists,
-    getAllGenderLists,
-} from "../../store/reducers/getAllMenuLists/allMenuAndProductListsApi";
 import { brandType } from "../../types/constants/brand.type";
 import { categoryType } from "../../types/constants/category.type";
 import { genderType } from "../../types/constants/gender.type";
+import axios from "axios";
+import baseURL from "../../api";
 
 const Navbar = () => {
     const themes = useTheme();
     const matches = useMediaQuery(themes.breakpoints.down("md"));
     const router = useRouter();
     const dispatch = useDispatch();
+
     const productDetails = useSelector(
         (state) => state.userSelectedProductListSlice
     );
+    
+    const cartProductLists = useSelector((state) => state.productListsSlice);
+    console.log("NAVBAR cartProductLists :: ", cartProductLists);
 
-    const { brandLists, categoryLists, genderLists } = useSelector(
-        (state) => state.allMenuAndProductListSlice
-    );
-
+    const [brandLists, setBrandLists] = useState<brandType[]>();
+    const [categoryLists, setCategoryLists] = useState<categoryType[]>();
+    const [genderLists, setGenderLists] = useState<genderType[]>();
     const [totalItems, setTotalItems] = useState<number>(0);
     useEffect(() => {
         if (productDetails?.cartProductDetails?.length > 0) {
@@ -49,10 +46,22 @@ const Navbar = () => {
     }, [productDetails]);
 
     useEffect(() => {
-        console.log("default useeffect : ");
-        // dispatch(getAllBrandLists());
-        // dispatch(getAllCategoryLists());
-        // dispatch(getAllGenderLists());
+        const callApi = async () => {
+            await axios.get(`${baseURL}/brand`).then((response) => {
+                console.log("brand list : ", response.data);
+                setBrandLists(response.data);
+            });
+            await axios.get(`${baseURL}/category`).then((response) => {
+                console.log("category list : ", response.data);
+                setCategoryLists(response.data);
+            });
+            await axios.get(`${baseURL}/gender`).then((response) => {
+                console.log("gender list : ", response.data);
+                setGenderLists(response.data);
+            });
+        };
+        callApi();
+
         if (productDetails?.cartProductDetails?.length === 0) {
             if (localStorage.getItem("userSelectedProductList")) {
                 let list = JSON.parse(
@@ -101,6 +110,8 @@ const Navbar = () => {
     const handleClickMobile = (slug: string) => {
         setSelectedGender(slug);
     };
+
+    if (!brandLists || !categoryLists || !genderLists) return <></>;
 
     return (
         <Box>

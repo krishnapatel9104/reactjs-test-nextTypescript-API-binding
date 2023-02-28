@@ -11,7 +11,14 @@ export interface allMenuAndProductListsType {
   sizeLists?: sizeType[],
   colorLists?: colorType[],
   productLists?: productsType[],
-  checkoutNewArrivalsProductLists?: number[],
-  bestSellerProductLists?: number[],
-  bestDealProductLists?: number[]
+  checkoutNewArrivalsProductLists?: productsType[],
+  bestSellerProductLists?: productsType[],
+  bestDealProductLists?: productsType[]
+}
+
+export interface filtersType {
+  gender?: number;
+  category?: number[] | number;
+  brand?: number[];
+  size?: number[];
 }

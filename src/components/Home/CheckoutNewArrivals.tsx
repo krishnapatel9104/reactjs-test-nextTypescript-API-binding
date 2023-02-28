@@ -2,25 +2,26 @@ import React, { useEffect, useState } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import theme from "../../theme";
 import Image from "next/image";
-// import { checkoutNewArrivalProductLists } from "../../data/checkoutNewArrivalProductLists";
-// import { productLists } from "../../data/productLists";
 import { productsType } from "../../types/constants/products.type";
-import { useSelector } from "../../store";
+import axios from "axios";
+import baseURL from "../../api";
 
 export const CheckoutNewArrivals = () => {
     const [checkoutNewArrivalProducts, setCheckoutNewArrivalProducts] =
         useState<productsType[]>();
 
-    const productLists = useSelector(
-        (state) => state.allMenuAndProductListSlice.productLists
-    );
-
     useEffect(() => {
-        let result = productLists?.filter((product: productsType) => {
-            if (product.type === 1) return product;
-        });
-        setCheckoutNewArrivalProducts(result);
-    }, [productLists]);
+        const callApi = async () => {
+            await axios
+                .get(`${baseURL}/product`, {
+                    params: { type: "checkoutNewArrivals" },
+                })
+                .then((response) => {
+                    setCheckoutNewArrivalProducts(response.data);
+                });
+        };
+        callApi();
+    }, []);
 
     return (
         <Box

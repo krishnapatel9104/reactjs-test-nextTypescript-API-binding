@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ProtectedRoute } from "../src/utils/ProtectedRoute";
 import theme from "../src/theme";
 import { Box } from "@mui/material";
@@ -16,24 +16,9 @@ import { FooterSliderSection } from "../src/components/Home/FooterSliderSection"
 import { Footer } from "../src/components/Home/Footer";
 import Navbar from "../src/components/Navbar/Navbar";
 import { NextPage } from "next";
-import { useDispatch } from "../src/store";
-import {
-    getAllBrandLists,
-    getAllCategoryLists,
-    getAllGenderLists,
-    getAllProductLists,
-} from "../src/store/reducers/getAllMenuLists/allMenuAndProductListsApi";
 
-interface IndexPageProps {}
+interface IndexPageProps { }
 const Index: NextPage<IndexPageProps> = () => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getAllProductLists());
-        dispatch(getAllBrandLists());
-        dispatch(getAllCategoryLists());
-        dispatch(getAllGenderLists());
-    }, []);
-
     return (
         <ProtectedRoute>
             <Box sx={{ backgroundColor: theme.palette?.background.default }}>

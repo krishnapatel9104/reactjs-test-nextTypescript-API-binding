@@ -3,6 +3,8 @@ import { Action, ThunkDispatch } from '@reduxjs/toolkit';
 import { userCartProductsType } from '../types/redux/userSelectedProductList.type';
 import { userShippingDataType } from '../types/redux/userShippingDetails.type';
 import { userPaymentDetailsType } from '../types/redux/userPaymentDetails.type';
+import { productListsSlice } from './reducers/productDetailsLists/productLists.slice';
+import { productsType } from '../types/redux/productLists.type';
 
 export interface RootReduxState {
   UserSlice: UserType;
@@ -10,6 +12,7 @@ export interface RootReduxState {
   userShippingDetailsSlice: userShippingDataType;
   userPaymentDetailsSlice: userPaymentDetailsType;
   allMenuAndProductListSlice: any;
+  productListsSlice: productsType
 
 }
 export type AppDispatch = ThunkDispatch<RootReduxState, unknown, Action<string>>;

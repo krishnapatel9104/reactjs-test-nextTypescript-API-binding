@@ -4,17 +4,14 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/scrollbar";
-
 import { Keyboard, Scrollbar, Pagination, Navigation } from "swiper";
-// import { bestSellerProductLists } from '../../data/bestSellerProductLists';
-// import { productLists } from '../../data/productLists';
 import { productsType } from "../../types/constants/products.type";
-
 import theme from "../../theme";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import React, { useEffect, useState, useRef } from "react";
-import { useSelector } from "../../store";
+import baseURL from "../../api";
+import axios from "axios";
 
 export const BestSeller = () => {
     const router = useRouter();
@@ -25,16 +22,18 @@ export const BestSeller = () => {
     const bestSellerPrevRef = useRef(null);
     const bestSellerNextRef = useRef(null);
 
-    const productLists = useSelector(
-        (state) => state.allMenuAndProductListSlice.productLists
-    );
-
     useEffect(() => {
-        let result = productLists?.filter((product: productsType) => {
-            if (product.type === 3) return product;
-        });
-        setBestSellerProducts(result);
-    }, [productLists]);
+        const callApi = async () => {
+            await axios
+                .get(`${baseURL}/product`, {
+                    params: { type: "bestSeller" },
+                })
+                .then((response) => {
+                    setBestSellerProducts(response.data.filterData);
+                });
+        };
+        callApi();
+    }, []);
 
     return (
         <Box

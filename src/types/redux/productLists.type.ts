@@ -1,4 +1,4 @@
-export interface productsType {
+export interface productType {
   id: number
   productName: string
   productImages: string[]
@@ -25,4 +25,8 @@ export interface productsType {
   reviewRate: number,
   slug: string,
   type: number
+}
+
+export interface productsType {
+  productLists: productType[]
 }

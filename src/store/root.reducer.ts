@@ -5,12 +5,14 @@ import userSelectedProductListSlice from './reducers/userSelectedProductList/use
 import userShippingDetailsSlice from './reducers/userShippingDetails/userShippingDetails.slice';
 import userPaymentDetailsSlice from './reducers/userPaymentDetails/userPaymentDetails.slice';
 import allMenuAndProductListSlice from './reducers/getAllMenuLists/getAllMenuAndProductLists.slice';
+import productListsSlice from './reducers/productDetailsLists/productLists.slice';
 
 const rootReducer = combineReducers<RootReduxState>({
   UserSlice,
   userSelectedProductListSlice,
   userShippingDetailsSlice,
   userPaymentDetailsSlice,
-  allMenuAndProductListSlice
+  allMenuAndProductListSlice,
+  productListsSlice
 });
 export default rootReducer;

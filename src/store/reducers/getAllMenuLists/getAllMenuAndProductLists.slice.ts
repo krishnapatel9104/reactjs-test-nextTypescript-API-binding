@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getAllBrandLists, getAllCategoryLists, getAllProductLists,getAllGenderLists } from "./allMenuAndProductListsApi";
+import { getAllBrandLists, getAllCategoryLists, getAllProductLists, getAllGenderLists } from "./allMenuAndProductListsApi";
 import { allMenuAndProductListsType } from '../../../types/redux/allMenuAndProductLists.type';
 import { brandType } from '../../../types/constants/brand.type';
 import { categoryType } from "../../../types/constants/category.type";
@@ -33,7 +33,21 @@ export const allMenuAndProductListSlice = createSlice({
       state.genderLists = action.payload
     })
     builder.addCase(getAllProductLists.fulfilled, (state, action: PayloadAction<productsType[]>) => {
-      state.productLists = action.payload
+      let checkoutNewArrivals = action.payload.filter((product) => product.type === 1);
+      console.log("checkout : ", checkoutNewArrivals.length);
+
+      let bestDeal = action.payload.filter((product) => product.type === 2);
+      console.log("bestdeal : ", bestDeal.length);
+
+      let bestSeller = action.payload.filter((product) => product.type === 3);
+      console.log("bestseller : ", bestSeller.length);
+
+      console.log("productLists : ", action.payload.length);
+
+      state.checkoutNewArrivalsProductLists = checkoutNewArrivals;
+      state.bestDealProductLists = bestDeal;
+      state.bestSellerProductLists = bestSeller;
+      state.productLists = action.payload;
     })
   }
 });

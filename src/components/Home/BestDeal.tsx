@@ -6,17 +6,13 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/scrollbar";
-
 import { Keyboard, Scrollbar, Pagination, Navigation } from "swiper";
-
 import theme from "../../theme";
 import { useRouter } from "next/router";
 import Image from "next/image";
-// import { bestDealProductLists } from "../../data/bestDealProductLists";
-// import { productLists } from "../../data/productLists";
 import { productsType } from "../../types/constants/products.type";
-import { genderLists } from "../../data/genderLists";
-import { dispatch, useSelector } from "../../store";
+import axios from "axios";
+import baseURL from "../../api";
 
 export const BestDeal = () => {
     const router = useRouter();
@@ -25,16 +21,16 @@ export const BestDeal = () => {
     const bestDealPrevRef = useRef(null);
     const bestDealNextRef = useRef(null);
 
-    const productLists = useSelector(
-        (state) => state.allMenuAndProductListSlice.productLists
-    );
-
     useEffect(() => {
-        let result = productLists?.filter((product: productsType) => {
-            if (product.type === 2) return product;
-        });
-        setBestDealProducts(result);
-    }, [productLists]);
+        const callApi = async () => {
+            await axios
+                .get(`${baseURL}/product`, { params: { type: "bestDeal" } })
+                .then((response) => {
+                    setBestDealProducts(response.data.filterData);
+                });
+        };
+        callApi();
+    }, []);
 
     return (
         <Box
