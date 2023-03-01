@@ -5,7 +5,7 @@ import { categoryType } from "../../../types/constants/category.type";
 import { genderType } from '../../../types/constants/gender.type';
 import { productsType, productType } from '../../../types/redux/productLists.type';
 import { addProductToCart } from './productLists.api';
-import { userCartProductsType,userCartProductType } from "../../../types/redux/userSelectedProductList.type";
+import { userCartProductsType, userCartProductType } from "../../../types/redux/userSelectedProductList.type";
 
 const initialState: userCartProductsType = {
   cartProductDetails: []
@@ -22,7 +22,7 @@ export const productListsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(addProductToCart.fulfilled, (state, action: PayloadAction<userCartProductType>) => {
       console.log("in redux extra builder : ", action.payload);
-      state.cartProductDetails.concat(action.payload);
+      state.cartProductDetails.push(action.payload);
       // state.cartProductDetails = action.payload
     })
   }

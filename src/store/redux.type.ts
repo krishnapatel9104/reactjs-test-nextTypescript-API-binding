@@ -12,7 +12,7 @@ export interface RootReduxState {
   userShippingDetailsSlice: userShippingDataType;
   userPaymentDetailsSlice: userPaymentDetailsType;
   allMenuAndProductListSlice: any;
-  productListsSlice: productsType
+  productListsSlice: userCartProductsType
 
 }
 export type AppDispatch = ThunkDispatch<RootReduxState, unknown, Action<string>>;

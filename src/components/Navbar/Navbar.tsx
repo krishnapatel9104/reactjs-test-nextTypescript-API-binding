@@ -27,8 +27,10 @@ const Navbar = () => {
     const productDetails = useSelector(
         (state) => state.userSelectedProductListSlice
     );
-    
-    const cartProductLists = useSelector((state) => state.productListsSlice);
+
+    const cartProductLists = useSelector(
+        (state) => state.productListsSlice.cartProductDetails
+    );
     console.log("NAVBAR cartProductLists :: ", cartProductLists);
 
     const [brandLists, setBrandLists] = useState<brandType[]>();
@@ -229,7 +231,7 @@ const Navbar = () => {
                             }}
                         >
                             <Typography sx={{ color: "white" }}>
-                                {totalItems}
+                                {cartProductLists ? cartProductLists.length : 0}
                             </Typography>
                         </Box>
                     </Box>
@@ -575,7 +577,9 @@ const Navbar = () => {
                                         }}
                                     >
                                         <Typography sx={{ color: "white" }}>
-                                            {totalItems}
+                                            {cartProductLists
+                                                ? cartProductLists.length
+                                                : 0}
                                         </Typography>
                                     </Box>
                                 </Box>
