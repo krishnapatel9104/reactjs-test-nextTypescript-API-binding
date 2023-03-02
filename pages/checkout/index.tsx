@@ -145,6 +145,11 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
             return true;
         else return false;
     };
+    const resetRedux = () => {
+        dispatch(resetShippingDetails());
+        dispatch(resetPaymentDetails());
+        dispatch(resetProductLists());
+    };
     useEffect(() => {
         if (shippingData.shippingId !== 0 && checkoutData.checkoutId !== 0) {
             let payload: cartProductListsType = cartProductDetails;
@@ -157,9 +162,7 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
                 checkoutId: checkoutData.checkoutId,
             };
             dispatch(addOrderDetails(payload));
-            dispatch(resetShippingDetails());
-            dispatch(resetPaymentDetails());
-            dispatch(resetProductLists());
+            resetRedux();
         }
     }, [shippingData, checkoutData]);
 

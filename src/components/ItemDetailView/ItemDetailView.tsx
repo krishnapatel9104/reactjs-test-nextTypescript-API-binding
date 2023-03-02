@@ -307,16 +307,14 @@ const ItemDetailView: FC<itemDetailViewProps> = ({ product }) => {
                                                     key={index}
                                                     sx={{
                                                         color:
-                                                            selectedSize ===
-                                                            size
+                                                            selectedSize == size
                                                                 ? "white"
                                                                 : "black",
                                                         width: "fit-content",
                                                         border: "1px solid #000000",
                                                         padding: "10px 20px",
                                                         backgroundColor:
-                                                            selectedSize ===
-                                                            size
+                                                            selectedSize == size
                                                                 ? "#1B2437 !important"
                                                                 : "white",
                                                     }}
@@ -370,18 +368,18 @@ const ItemDetailView: FC<itemDetailViewProps> = ({ product }) => {
                                                             key={index}
                                                             sx={{
                                                                 border:
-                                                                    selectedColor ===
+                                                                    selectedColor ==
                                                                     color
                                                                         ? "1px solid red"
                                                                         : "1px solid white",
                                                                 borderWidth:
-                                                                    selectedColor ===
+                                                                    selectedColor ==
                                                                     color
                                                                         ? "3px"
                                                                         : "0",
                                                                 width: "fit-content",
                                                                 outlineColor:
-                                                                    selectedColor ===
+                                                                    selectedColor ==
                                                                     color
                                                                         ? "1px solid red"
                                                                         : "1px solid black",

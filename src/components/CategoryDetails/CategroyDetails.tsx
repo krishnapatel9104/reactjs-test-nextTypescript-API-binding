@@ -110,7 +110,7 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
                 },
             })
         ).data;
-        setPriceRange([result.priceRange.min, result.priceRange.max]);
+        setPriceFilter([result.priceRange?.min | 0, result.priceRange?.max | 0]);
         setCount(Math.ceil(result.totalCount / PER_PAGE));
         setTotalCounts(result.totalCount);
         setFilterCategoryData(result.filterData);
@@ -123,7 +123,7 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
         ) {
             apiCall();
         }
-    }, [brandFilter, categoryFilter, sizeFilter, selectedGender, priceFilter]);
+    }, [brandFilter, categoryFilter, sizeFilter, selectedGender]);
 
     const handleProductClick = (productDetail: productsType) => {
         setIsOpen(!isOpen);
