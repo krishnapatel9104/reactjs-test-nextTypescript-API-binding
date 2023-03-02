@@ -8,4 +8,9 @@ export interface userShippingDataType {
   city: string
   address: string
   zipCode: string
+  userId?: number
+}
+
+export interface userShippingResDataType {
+  shippingId: number
 }

@@ -10,12 +10,16 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import { productsType } from "../../types/constants/products.type";
-import { sizeLists } from "../../data/sizeLists";
-import { colorLists } from "../../data/colorLists";
+// import { sizeLists } from "../../data/sizeLists";
+// import { colorLists } from "../../data/colorLists";
 import { useSelector, useDispatch } from "../../store/index";
 import { ProtectedRoute } from "../../utils/ProtectedRoute";
 import SwiperSlider from "./SwiperSlider";
 import { addProductToCart } from "../../store/reducers/productDetailsLists/productLists.api";
+import baseURL from "../../api";
+import axios from "axios";
+import { sizeType } from "../../types/constants/size.type";
+import { colorType } from "../../types/constants/color.type";
 
 interface itemDetailViewProps {
     product: productsType;
@@ -30,22 +34,36 @@ const ItemDetailView: FC<itemDetailViewProps> = ({ product }) => {
     const [selectedColor, setSelectedColor] = useState<number>(
         productDetail?.color && productDetail?.color[0]
     );
+    const [sizeLists, setSizeLists] = useState<sizeType[]>();
+    const [colorLists, setColorLists] = useState<colorType[]>();
     const [value, setValue] = useState<string>("1");
-    const userCartProductDetails = useSelector(
-        (state) => state.userSelectedProductListSlice
+    // const userCartProductDetails = useSelector(
+    //     (state) => state.userSelectedProductListSlice
+    // );
+
+    console.log(
+        "AAAAAAAAAAA cartProductLists :: ",
+        product,
+        productDetail,
+        sizeLists,
+        colorLists
     );
 
-    const cartProductLists = useSelector((state) => state.productListsSlice);
-    console.log("AAAAAAAAAAA cartProductLists :: ", cartProductLists);
+    useEffect(() => {
+        const callApi = async () => {
+            await axios.get(`${baseURL}/size`).then((response) => {
+                setSizeLists(response.data);
+            });
+            await axios.get(`${baseURL}/color`).then((response) => {
+                setColorLists(response.data);
+            });
+        };
+        callApi();
+    }, []);
 
     useEffect(() => {
-        if (userCartProductDetails?.cartProductDetails?.length !== 0) {
-            localStorage.setItem(
-                "userSelectedProductList",
-                JSON.stringify(userCartProductDetails.cartProductDetails)
-            );
-        }
-    }, [userCartProductDetails.cartProductDetails]);
+        setProductDetail(product);
+    }, [product]);
 
     const handleChange = (newValue: string) => {
         setValue(newValue);
@@ -69,7 +87,8 @@ const ItemDetailView: FC<itemDetailViewProps> = ({ product }) => {
 
     const handleShopNow = () => {
         let object = productObjectDetail();
-        dispatch(setUserSelectedProductList(object));
+        // dispatch(setUserSelectedProductList(object));
+        dispatch(addProductToCart(object));
         router.push("/shipping");
     };
 
@@ -78,6 +97,8 @@ const ItemDetailView: FC<itemDetailViewProps> = ({ product }) => {
         // dispatch(setUserSelectedProductList(object));
         dispatch(addProductToCart(object));
     };
+
+    if (!sizeLists || !colorLists) return <></>;
 
     return (
         <ProtectedRoute>
@@ -292,12 +313,22 @@ const ItemDetailView: FC<itemDetailViewProps> = ({ product }) => {
                                         display: "flex",
                                     }}
                                 >
-                                    {product?.size &&
-                                        product.size.length > 0 &&
+                                    {product.size.length > 0 &&
                                         product.size.map((size, index) => {
                                             let sizeDetail = sizeLists.find(
-                                                (s) => s.id === size
+                                                (s) => {
+                                                    if (s.id == size) return s;
+                                                }
                                             );
+                                            // console.log("size single : ", size);
+
+                                            console.log(
+                                                "sizeLists ZZZZZZZZZZZZZZ : ",
+                                                product.size,
+                                                sizeLists,
+                                                sizeDetail
+                                            );
+
                                             return (
                                                 <Button
                                                     key={index}
@@ -357,10 +388,10 @@ const ItemDetailView: FC<itemDetailViewProps> = ({ product }) => {
                                             product.color.map(
                                                 (color, index) => {
                                                     let colorDetail =
-                                                        colorLists.find(
-                                                            (c) =>
-                                                                c.id === color
-                                                        );
+                                                        colorLists.find((c) => {
+                                                            if (c.id == color)
+                                                                return c;
+                                                        });
                                                     return (
                                                         <Button
                                                             key={index}

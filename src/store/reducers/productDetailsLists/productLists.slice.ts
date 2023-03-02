@@ -1,34 +1,56 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
 import { allMenuAndProductListsType } from '../../../types/redux/allMenuAndProductLists.type';
 import { brandType } from '../../../types/constants/brand.type';
 import { categoryType } from "../../../types/constants/category.type";
 import { genderType } from '../../../types/constants/gender.type';
 import { productsType, productType } from '../../../types/redux/productLists.type';
-import { addProductToCart } from './productLists.api';
+import { addProductToCart, getCartProductList, updateProductToCart, deleteProductToCart } from './productLists.api';
 import { userCartProductsType, userCartProductType } from "../../../types/redux/userSelectedProductList.type";
+import { cartProductListsType } from "../../../types/redux/cartProductLists.type";
 
-const initialState: userCartProductsType = {
-  cartProductDetails: []
+const initialState: cartProductListsType = {
+  cartItemsDetails: [],
+  totalInfo: {
+    grandTotal: 0,
+    subTotal: 0,
+    Shipping: 0,
+    VatAndTax: 0
+  },
+  userId: 0,
+  shippingId: 0,
+  checkoutId: 0
 };
 export const productListsSlice = createSlice({
   name: "userSelectedProductList",
   initialState: initialState,
   reducers: {
-    // setFilterProductLists: (state: productsType, action: PayloadAction<productType[]>) => {
-    //   console.log("action.paylod set oproduct lists slice : ", action.payload);
-    //   state.productLists = action.payload
-    // }
+    resetProductLists: (state: cartProductListsType) => {
+      return {
+        ...state,
+        cartItemsDetails: [],
+        totalInfo: {
+          grandTotal: 0,
+          subTotal: 0,
+          Shipping: 0,
+          VatAndTax: 0
+        },
+        userId: 0,
+        shippingId: 0,
+        checkoutId: 0
+      }
+    }
   },
   extraReducers: (builder) => {
-    builder.addCase(addProductToCart.fulfilled, (state, action: PayloadAction<userCartProductType>) => {
-      console.log("in redux extra builder : ", action.payload);
-      state.cartProductDetails.push(action.payload);
-      // state.cartProductDetails = action.payload
+    builder.addMatcher(isAnyOf(addProductToCart.fulfilled, getCartProductList.fulfilled, updateProductToCart.fulfilled, deleteProductToCart.fulfilled), (state, action: PayloadAction<cartProductListsType>) => {
+      console.log("in redux extra builder get method restore : ", action.payload);
+      state.cartItemsDetails = action.payload.cartItemsDetails
+      state.totalInfo = action.payload.totalInfo
     })
   }
 });
 
 export const {
+  resetProductLists
   // setFilterProductLists
 } = productListsSlice.actions;
 

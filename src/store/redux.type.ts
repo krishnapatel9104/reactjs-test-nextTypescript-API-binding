@@ -1,18 +1,17 @@
 import { UserType } from '../types/redux/user.type';
 import { Action, ThunkDispatch } from '@reduxjs/toolkit';
 import { userCartProductsType } from '../types/redux/userSelectedProductList.type';
-import { userShippingDataType } from '../types/redux/userShippingDetails.type';
-import { userPaymentDetailsType } from '../types/redux/userPaymentDetails.type';
-import { productListsSlice } from './reducers/productDetailsLists/productLists.slice';
-import { productsType } from '../types/redux/productLists.type';
+import { userShippingResDataType } from '../types/redux/userShippingDetails.type';
+import { userPaymentDetailsResType } from '../types/redux/userPaymentDetails.type';
+import { cartProductListsType } from '../types/redux/cartProductLists.type';
 
 export interface RootReduxState {
   UserSlice: UserType;
   userSelectedProductListSlice: userCartProductsType;
-  userShippingDetailsSlice: userShippingDataType;
-  userPaymentDetailsSlice: userPaymentDetailsType;
+  userShippingDetailsSlice: userShippingResDataType;
+  userPaymentDetailsSlice: userPaymentDetailsResType;
   allMenuAndProductListSlice: any;
-  productListsSlice: userCartProductsType
+  productListsSlice: cartProductListsType;
 
 }
 export type AppDispatch = ThunkDispatch<RootReduxState, unknown, Action<string>>;

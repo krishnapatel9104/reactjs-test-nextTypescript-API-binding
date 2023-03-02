@@ -14,7 +14,7 @@ import { productsType } from "../../types/constants/products.type";
 import FilterComponent from "./FilterComponent";
 import ProductCatelog from "./ProductCatelog";
 import { dispatch, useDispatch } from "../../store";
-import { setFilterProductLists } from "../../store/reducers/productDetailsLists/productLists.slice";
+// import { setFilterProductLists } from "../../store/reducers/productDetailsLists/productLists.slice";
 import axios from "axios";
 import baseURL from "../../api";
 import { brandType } from "../../types/constants/brand.type";
@@ -36,10 +36,8 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
     const [brandFilter, setBrandFilter] = useState<number[]>([]);
     const [sizeFilter, setSizeFilter] = useState<number[]>([]);
     const [categoryFilter, setCategoryFilter] = useState<number[]>([]);
-    const [priceFilter, setPriceFilter] = useState<[number, number]>([
-        100, 450,
-    ]);
-    const [priceRange, setPriceRange] = useState<[number, number]>();
+    const [priceFilter, setPriceFilter] = useState<[number, number]>([0, 0]);
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, 0]);
     const [selectedGender, setSelectedGender] = useState<number>();
     const [totalCounts, setTotalCounts] = useState<number>(totalCount || 0);
     const [selectedType, setSelectedType] = useState<string>("");
@@ -53,6 +51,7 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
     const [count, setCount] = useState(
         Math.ceil(totalCount ? totalCount : 0 / PER_PAGE)
     );
+    // let priceRange: [number, number] = [0, 0];
     // const indexOfLastRecord = page * PER_PAGE;
     // const indexOfFirstRecord = indexOfLastRecord - PER_PAGE;
     const router = useRouter();
@@ -130,7 +129,8 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
             })
         ).data;
         console.log("FIlter data in AAAAAAAAAAAAAAA : ", result);
-        setPriceFilter([result.priceRange.min, result.priceRange.max]);
+        // priceRange = [result.priceRange.min, result.priceRange.max];
+        setPriceRange([result.priceRange.min, result.priceRange.max]);
         setCount(Math.ceil(result.totalCount / PER_PAGE));
         setTotalCounts(result.totalCount);
         setFilterCategoryData(result.filterData);
@@ -143,7 +143,7 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
         ) {
             apiCall();
         }
-    }, [brandFilter, categoryFilter, sizeFilter, selectedGender]);
+    }, [brandFilter, categoryFilter, sizeFilter, selectedGender, priceFilter]);
 
     // useEffect(() => {
     //     setPage(1);
@@ -263,6 +263,8 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
     // }, [filterCategoryData]);
 
     const handleProductClick = (productDetail: productsType) => {
+        console.log("productDetail QQQQQQQQQQQQQQQQQQQ : ", productDetail);
+
         setIsOpen(!isOpen);
         router.replace(
             {
@@ -374,7 +376,7 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
                         setIsOpen={setIsOpen}
                         handleChange={handleChange}
                         priceFilter={priceFilter}
-                        // priceRange={priceRange}
+                        priceRange={priceRange}
                         setPriceFilter={setPriceFilter}
                         sizeFilter={sizeFilter}
                         categoryFilter={categoryFilter}

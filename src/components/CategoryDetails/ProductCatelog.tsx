@@ -221,12 +221,13 @@ const ProductCatelog: React.FC<ProductCatelogProps> = ({
                                                         height={0}
                                                         width={0}
                                                         sizes="(max-width:0) 100vw
-                                  (max-height:0) 100vh"
+                                                                (max-height:0) 100vh"
                                                         style={{
                                                             height: "100%",
                                                             width: "100%",
-                                                            objectFit:
-                                                                "contain",
+                                                            objectFit: "cover",
+                                                            objectPosition:
+                                                                "top",
                                                         }}
                                                         onClick={(e) =>
                                                             handleProductClick(
@@ -243,7 +244,7 @@ const ProductCatelog: React.FC<ProductCatelogProps> = ({
                                                             position:
                                                                 "absolute",
                                                             paddingTop: "10px",
-                                                            top: "15%",
+                                                            top: "8%",
                                                             right: 0,
                                                         }}
                                                     >
@@ -256,9 +257,7 @@ const ProductCatelog: React.FC<ProductCatelogProps> = ({
                                                             height={22}
                                                         />
                                                     </Box>
-                                                    {/* {checkoutNewArrivalProductLists.productId.includes(
-                                                        product.id
-                                                    ) && (
+                                                    {product.type === 1 && (
                                                         <Box
                                                             sx={{
                                                                 backgroundColor:
@@ -268,7 +267,7 @@ const ProductCatelog: React.FC<ProductCatelogProps> = ({
                                                                     "2px 10px",
                                                                 position:
                                                                     "absolute",
-                                                                top: "20px",
+                                                                top: "0",
                                                             }}
                                                         >
                                                             <Typography
@@ -285,7 +284,7 @@ const ProductCatelog: React.FC<ProductCatelogProps> = ({
                                                                 New Arrivals
                                                             </Typography>
                                                         </Box>
-                                                    )} */}
+                                                    )}
                                                 </Box>
                                                 <Box
                                                     sx={{

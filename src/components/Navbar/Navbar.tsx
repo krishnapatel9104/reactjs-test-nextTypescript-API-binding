@@ -17,6 +17,7 @@ import { categoryType } from "../../types/constants/category.type";
 import { genderType } from "../../types/constants/gender.type";
 import axios from "axios";
 import baseURL from "../../api";
+import { getCartProductList } from "../../store/reducers/productDetailsLists/productLists.api";
 
 const Navbar = () => {
     const themes = useTheme();
@@ -24,55 +25,61 @@ const Navbar = () => {
     const router = useRouter();
     const dispatch = useDispatch();
 
-    const productDetails = useSelector(
-        (state) => state.userSelectedProductListSlice
-    );
+    // const productDetails = useSelector(
+    //     (state) => state.userSelectedProductListSlice
+    // );
 
     const cartProductLists = useSelector(
-        (state) => state.productListsSlice.cartProductDetails
+        (state) => state.productListsSlice.cartItemsDetails
     );
-    console.log("NAVBAR cartProductLists :: ", cartProductLists);
-
     const [brandLists, setBrandLists] = useState<brandType[]>();
     const [categoryLists, setCategoryLists] = useState<categoryType[]>();
     const [genderLists, setGenderLists] = useState<genderType[]>();
     const [totalItems, setTotalItems] = useState<number>(0);
     useEffect(() => {
-        if (productDetails?.cartProductDetails?.length > 0) {
+        if (cartProductLists?.length > 0) {
             let total = 0;
-            productDetails?.cartProductDetails.forEach((product) => {
+            cartProductLists.forEach((product) => {
                 total += product.quantity;
             });
             setTotalItems(total);
         }
-    }, [productDetails]);
+    }, [cartProductLists]);
 
     useEffect(() => {
         const callApi = async () => {
             await axios.get(`${baseURL}/brand`).then((response) => {
-                console.log("brand list : ", response.data);
                 setBrandLists(response.data);
             });
             await axios.get(`${baseURL}/category`).then((response) => {
-                console.log("category list : ", response.data);
                 setCategoryLists(response.data);
             });
             await axios.get(`${baseURL}/gender`).then((response) => {
-                console.log("gender list : ", response.data);
                 setGenderLists(response.data);
             });
         };
         callApi();
 
-        if (productDetails?.cartProductDetails?.length === 0) {
-            if (localStorage.getItem("userSelectedProductList")) {
-                let list = JSON.parse(
-                    localStorage.getItem("userSelectedProductList") || ""
-                );
-                if (list?.length > 0) {
-                    dispatch(restoreUserSelectedProductList(list));
-                }
-            }
+        // if (cartProductLists?.length === 0) {
+        //     if (localStorage.getItem("userSelectedProductList")) {
+        //         let list = JSON.parse(
+        //             localStorage.getItem("userSelectedProductList") || ""
+        //         );
+        //         if (list?.length > 0) {
+        //             dispatch(restoreUserSelectedProductList(list));
+        //         }
+        //     }
+        // }
+        if (cartProductLists?.length === 0) {
+            dispatch(getCartProductList(1));
+            // let list = JSON.parse(
+            //     localStorage.getItem("userSelectedProductList") || ""
+            // );
+            // if (list?.length > 0) {
+            //     dispatch(restoreUserSelectedProductList(list));
+            // } else {
+            //     router.push("/");
+            // }
         }
     }, []);
     useEffect(() => {
@@ -94,7 +101,7 @@ const Navbar = () => {
 
     if (matches && isOpen) setIsOpen(false);
     const handleClick = () => {
-        if (productDetails?.cartProductDetails.length > 0) {
+        if (cartProductLists.length > 0) {
             router.push("/shipping");
         } else {
             router.push("/");
@@ -231,7 +238,7 @@ const Navbar = () => {
                             }}
                         >
                             <Typography sx={{ color: "white" }}>
-                                {cartProductLists ? cartProductLists.length : 0}
+                                {totalItems}
                             </Typography>
                         </Box>
                     </Box>
