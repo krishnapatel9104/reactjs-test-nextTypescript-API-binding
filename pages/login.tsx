@@ -106,12 +106,12 @@ const LoginPage: NextPage<LoginPageProps> = () => {
               fontSize: '22px',
               width: '100%',
               marginBottom: { xs: '50px', md: '0' },
-              // '& .css-1c2i806-MuiFormLabel-root-MuiInputLabel-root': {
-              //   fontSize: '22px'
-              // },
-              // '& label+.css-v4u5dn-MuiInputBase-root-MuiInput-root': {
-              //   marginTop: '30px !important'
-              // },
+              '& .css-1c2i806-MuiFormLabel-root-MuiInputLabel-root': {
+                fontSize: '22px'
+              },
+              '& label+.css-v4u5dn-MuiInputBase-root-MuiInput-root': {
+                marginTop: '30px !important'
+              },
               '& .MuiFormHelperText-root': {
                 color: 'red'
               }

@@ -1,3 +1,4 @@
+import { productType } from './productLists.type';
 export interface CartItemsDetailType {
   id: number;
   cartId: number;
@@ -20,4 +21,12 @@ export interface cartProductListsType {
   userId?: number
   shippingId?: number
   checkoutId?: number
+}
+
+export interface getCartProductType {
+  id: number
+  color: number
+  size: number
+  quantity: number
+  products: productType
 }

@@ -7,12 +7,10 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "../../src/store";
 import { StepperComp } from "../../src/components/common/StepperComp";
 import { YourOrder } from "../../src/components/common/YourOrder";
-// import { setUserDetails } from "../../src/store/reducers/userShippingDetails/userShippingDetails.slice";
-
 import { ProtectedRoute } from "../../src/utils/ProtectedRoute";
 import { format } from "date-fns";
 import { isFuture } from "date-fns";
@@ -20,9 +18,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import { userShippingDataType } from "../../src/types/redux/userShippingDetails.type";
-import { restoreUserSelectedProductList } from "../../src/store/reducers/userSelectedProductList/userSelectedProductList.slice";
 import { Formik, Form, FormikProps } from "formik";
-
 import * as Yup from "yup";
 import { getCartProductList } from "../../src/store/reducers/productDetailsLists/productLists.api";
 import { addShippingDetails } from "../../src/store/reducers/userShippingDetails/userShippingDetails.api";
@@ -34,19 +30,9 @@ const ShippingPage: NextPage<ShippingPageProps> = () => {
     const cartProductDetails = useSelector(
         (state) => state.productListsSlice.cartItemsDetails
     );
-    console.log("redux cartdetaisl shippig page : ", cartProductDetails);
-
     useEffect(() => {
         if (cartProductDetails?.length === 0) {
             dispatch(getCartProductList(1));
-            // let list = JSON.parse(
-            //     localStorage.getItem("userSelectedProductList") || ""
-            // );
-            // if (list?.length > 0) {
-            //     dispatch(restoreUserSelectedProductList(list));
-            // } else {
-            //     router.push("/");
-            // }
         }
     });
 
@@ -107,7 +93,6 @@ const ShippingPage: NextPage<ShippingPageProps> = () => {
                                 zipCode: "",
                             }}
                             onSubmit={(values: userShippingDataType) => {
-                                // dispatch(setUserDetails(values));
                                 dispatch(addShippingDetails(values));
                                 router.push("/checkout");
                             }}

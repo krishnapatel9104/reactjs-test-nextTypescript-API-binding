@@ -7,19 +7,14 @@ import { ProtectedRoute } from "../../utils/ProtectedRoute";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import { productsType } from "../../types/constants/products.type";
-// import { categoryLists } from "../../data/categoryLists";
-// import { productLists } from "../../data/productLists";
-// import { brandLists } from "../../data/brandLists";
-// import { genderLists } from "../../data/genderLists";
 import FilterComponent from "./FilterComponent";
 import ProductCatelog from "./ProductCatelog";
-import { dispatch, useDispatch } from "../../store";
-// import { setFilterProductLists } from "../../store/reducers/productDetailsLists/productLists.slice";
 import axios from "axios";
 import baseURL from "../../api";
 import { brandType } from "../../types/constants/brand.type";
 import { categoryType } from "../../types/constants/category.type";
 import { genderType } from "../../types/constants/gender.type";
+import { sizeType } from "../../types/constants/size.type";
 
 interface categoryDetailsProps {
     products: productsType[];
@@ -44,6 +39,7 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
     const [brandLists, setBrandLists] = useState<brandType[]>();
     const [categoryLists, setCategoryLists] = useState<categoryType[]>();
     const [genderLists, setGenderLists] = useState<genderType[]>();
+    const [sizeLists, setSizeLists] = useState<sizeType[]>();
     const [filterCategoryData, setFilterCategoryData] =
         useState<productsType[]>(products);
     const [page, setPage] = useState<number>(1);
@@ -51,25 +47,20 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
     const [count, setCount] = useState(
         Math.ceil(totalCount ? totalCount : 0 / PER_PAGE)
     );
-    // let priceRange: [number, number] = [0, 0];
-    // const indexOfLastRecord = page * PER_PAGE;
-    // const indexOfFirstRecord = indexOfLastRecord - PER_PAGE;
     const router = useRouter();
-    const dispatch = useDispatch();
-
     useEffect(() => {
         const callApi = async () => {
             await axios.get(`${baseURL}/brand`).then((response) => {
-                console.log("brand list : ", response.data);
                 setBrandLists(response.data);
             });
             await axios.get(`${baseURL}/category`).then((response) => {
-                console.log("category list : ", response.data);
                 setCategoryLists(response.data);
             });
             await axios.get(`${baseURL}/gender`).then((response) => {
-                console.log("gender list : ", response.data);
                 setGenderLists(response.data);
+            });
+            await axios.get(`${baseURL}/size`).then((response) => {
+                setSizeLists(response.data);
             });
         };
         callApi();
@@ -105,16 +96,7 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
         }
     }, [genderLists, categoryLists, brandLists]);
 
-    console.log(
-        "selectedgender and category ro btand : ",
-        selectedGender,
-        categoryFilter,
-        brandFilter
-    );
-
     const apiCall = async () => {
-        console.log("inside apicall page value : ", page);
-
         const result = (
             await axios.get(`${baseURL}/product`, {
                 params: {
@@ -128,8 +110,6 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
                 },
             })
         ).data;
-        console.log("FIlter data in AAAAAAAAAAAAAAA : ", result);
-        // priceRange = [result.priceRange.min, result.priceRange.max];
         setPriceRange([result.priceRange.min, result.priceRange.max]);
         setCount(Math.ceil(result.totalCount / PER_PAGE));
         setTotalCounts(result.totalCount);
@@ -145,126 +125,7 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
         }
     }, [brandFilter, categoryFilter, sizeFilter, selectedGender, priceFilter]);
 
-    // useEffect(() => {
-    //     setPage(1);
-    //     if (filterCategoryData.length > 0) {
-    //         let minPrice = Math.min(
-    //             ...filterCategoryData.map(
-    //                 (product) => product.productCurrentPrice
-    //             )
-    //         );
-    //         let maxPrice = Math.max(
-    //             ...filterCategoryData.map(
-    //                 (product) => product.productCurrentPrice
-    //             )
-    //         );
-    //         setPriceFilter([minPrice, maxPrice]);
-    //     }
-    // }, [filterCategoryData]);
-
-    // useEffect(() => {
-    //     console.log("products : ", products);
-    //     let curRoute = router.asPath;
-    //     let genderValue = curRoute.split("/")[1];
-    //     let object = genderLists?.find((gender) => gender.slug === genderValue);
-    //     if (object) setSelectedGender(object.id);
-    //     let brandOrCategoryType = curRoute.split("/")[3];
-    //     if (brandOrCategoryType) setSelectedType(brandOrCategoryType);
-    //     let brandOrCategoryValue = curRoute.split("/")[4];
-    //     if (
-    //         brandOrCategoryType === "category" &&
-    //         brandOrCategoryValue &&
-    //         categoryLists
-    //     ) {
-    //         let object = categoryLists.find(
-    //             (category) => category.slug === brandOrCategoryValue
-    //         );
-    //         if (object) setCategoryFilter([object.id]);
-    //     }
-    //     if (
-    //         brandOrCategoryType === "brand" &&
-    //         brandOrCategoryValue &&
-    //         brandLists
-    //     ) {
-    //         let object = brandLists.find(
-    //             (brand) => brand.slug === brandOrCategoryValue
-    //         );
-    //         if (object) setBrandFilter([object.id]);
-    //     }
-    //     if (products.length > 0) {
-    //         let minPrice = Math.min(
-    //             ...products.map((product) => product.productCurrentPrice)
-    //         );
-    //         let maxPrice = Math.max(
-    //             ...products.map((product) => product.productCurrentPrice)
-    //         );
-    //         setPriceFilter([minPrice, maxPrice]);
-    //     }
-    // }, [products, router.asPath, brandLists, categoryLists]);
-
-    // useEffect(() => {
-    //     console.log(
-    //         "brand category size price selectedgender :: ",
-    //         selectedGender,
-    //         brandFilter,
-    //         categoryFilter,
-    //         sizeFilter,
-    //         priceFilter
-    //     );
-
-    //     if (brandFilter || sizeFilter || categoryFilter || priceFilter) {
-    //         const callApi = async () => {
-    //             await axios
-    //                 .get(`${baseURL}/product`, {
-    //                     params: {
-    //                         brandFilters: brandFilter,
-    //                         categoryFilters: categoryFilter,
-    //                         sizeFilters: sizeFilter,
-    //                         priceFilters: priceFilter,
-    //                         gender: selectedGender,
-    //                     },
-    //                 })
-    //                 .then((response) => {
-    //                     console.log("response filters : ", response.data);
-
-    //                     // setBestDealProducts(response.data.filterData);
-    //                 });
-    //         };
-    //         callApi();
-    //         // const newProductList = productLists.filter((product) => {
-    //         //     if (
-    //         //         (brandFilter.includes(product.brand) ||
-    //         //             categoryFilter.includes(product.category)) &&
-    //         //         product.gender === selectedGender &&
-    //         //         product.productCurrentPrice >= priceFilter[0] &&
-    //         //         product.productCurrentPrice <= priceFilter[1]
-    //         //     ) {
-    //         //         return product;
-    //         //     }
-    //         // });
-    //         // const list = productLists.filter((product) => {
-    //         //     if (product.gender === selectedGender) {
-    //         //         return product.size.find((size) =>
-    //         //             sizeFilter.includes(size)
-    //         //         );
-    //         //     }
-    //         // });
-    //         // let newFilterPRoductLists = [...newProductList, ...list].filter(
-    //         //     (product, ind, lists) =>
-    //         //         ind ===
-    //         //         lists.findIndex((productId) => productId.id === product.id)
-    //         // );
-    //         // setFilterCategoryData(newFilterPRoductLists);
-    //     }
-    // }, [brandFilter, sizeFilter, categoryFilter, priceFilter]);
-
-    // useEffect(() => {
-    //     setPage(1);
-    // }, [filterCategoryData]);
-
     const handleProductClick = (productDetail: productsType) => {
-        console.log("productDetail QQQQQQQQQQQQQQQQQQQ : ", productDetail);
-
         setIsOpen(!isOpen);
         router.replace(
             {
@@ -338,11 +199,9 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
         event: React.ChangeEvent<unknown>,
         page: number
     ) => {
-        console.log("change page number : ", page);
         setPage(page);
     };
     useEffect(() => {
-        console.log("page value ::::::::: ", page);
         if (
             selectedGender &&
             (categoryFilter.length > 0 || brandFilter.length > 0)
@@ -351,6 +210,7 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
         }
     }, [page]);
 
+    if (!brandLists || !categoryLists || !sizeLists) return <></>;
     return (
         <ProtectedRoute>
             <Box
@@ -381,6 +241,9 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
                         sizeFilter={sizeFilter}
                         categoryFilter={categoryFilter}
                         brandFilter={brandFilter}
+                        brandLists={brandLists}
+                        categoryLists={categoryLists}
+                        sizeLists={sizeLists}
                     />
                     <ProductCatelog
                         count={count}
@@ -393,8 +256,6 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
                             handleProductClick(productDetail)
                         }
                         totalCount={totalCounts}
-                        // indexOfLastRecord={indexOfLastRecord}
-                        // indexOfFirstRecord={indexOfFirstRecord}
                     />
                 </Box>
             </Box>

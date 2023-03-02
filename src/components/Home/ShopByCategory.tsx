@@ -11,9 +11,6 @@ import SwiperCore, {
     Pagination,
     Navigation,
 } from "swiper";
-// import { productLists } from '../../data/productLists';
-// import { genderLists } from '../../data/genderLists';
-// import { categoryLists } from '../../data/categoryLists';
 import theme from "../../theme";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -51,11 +48,9 @@ export const ShopByCategory = () => {
     useEffect(() => {
         const callApi = async () => {
             await axios.get(`${baseURL}/gender`).then((response) => {
-                console.log("gender list : ", response.data);
                 setGenderLists(response.data);
             });
             await axios.get(`${baseURL}/category`).then((response) => {
-                console.log("category list : ", response.data);
                 setCategoryLists(response.data);
             });
         };
@@ -86,8 +81,6 @@ export const ShopByCategory = () => {
     }, [selectedGender, selectedCategory]);
 
     if (!filterProductLists || !genderLists || !categoryLists) return <></>;
-
-    console.log("filter data array ::::::::: ", filterProductLists);
 
     return (
         <Box>
@@ -297,10 +290,6 @@ export const ShopByCategory = () => {
                                         (category) =>
                                             category.id === selectedCategory
                                     );
-                                    // if (
-                                    //     product.category === selectedCategory &&
-                                    //     product.gender === selectedGender
-                                    // ) {
                                     return (
                                         <Box key={product.id}>
                                             <SwiperSlide
@@ -440,7 +429,6 @@ export const ShopByCategory = () => {
                                             </SwiperSlide>
                                         </Box>
                                     );
-                                    // }
                                 })
                             ) : (
                                 <></>

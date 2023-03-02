@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-
 import { Button, Typography, Box } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -153,8 +152,6 @@ export const BestDeal = () => {
                     {bestDealProducts !== undefined &&
                         bestDealProducts?.length > 0 &&
                         bestDealProducts.map((product: productsType) => {
-                            console.log("product list : ", product);
-
                             return (
                                 <Box key={product.id}>
                                     <SwiperSlide

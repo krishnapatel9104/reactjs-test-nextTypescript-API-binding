@@ -4,7 +4,6 @@ export interface userCartProductsType {
 
 export interface userCartProductType {
   id?: number
-  // userId: number
   productId: number
   quantity: number
   size: number

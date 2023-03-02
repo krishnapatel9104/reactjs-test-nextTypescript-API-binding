@@ -12,27 +12,19 @@ import React, { useEffect, useState } from "react";
 import { StepperComp } from "../../src/components/common/StepperComp";
 import { YourOrder } from "../../src/components/common/YourOrder";
 import { useDispatch, useSelector } from "../../src/store";
-import {
-    resetPaymentDetails,
-    setPaymentDetails,
-} from "../../src/store/reducers/userPaymentDetails/userPaymentDetails.slice";
-import { restoreUserSelectedProductList } from "../../src/store/reducers/userSelectedProductList/userSelectedProductList.slice";
+import { resetPaymentDetails } from "../../src/store/reducers/userPaymentDetails/userPaymentDetails.slice";
 import { userPaymentDetailsType } from "../../src/types/redux/userPaymentDetails.type";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { NextPage } from "next";
 import { ProtectedRoute } from "../../src/utils/ProtectedRoute";
 import { PatternFormat } from "react-number-format";
-import { userCartProductType } from "../../src/types/redux/userSelectedProductList.type";
 import { getCartProductList } from "../../src/store/reducers/productDetailsLists/productLists.api";
 import {
     addCheckoutDetails,
     addOrderDetails,
 } from "../../src/store/reducers/userPaymentDetails/userPaymentDetails.api";
-import {
-    cartProductListsType,
-    orderDetailsType,
-} from "../../src/types/redux/cartProductLists.type";
+import { cartProductListsType } from "../../src/types/redux/cartProductLists.type";
 import { resetShippingDetails } from "../../src/store/reducers/userShippingDetails/userShippingDetails.slice";
 import { resetProductLists } from "../../src/store/reducers/productDetailsLists/productLists.slice";
 
@@ -132,30 +124,10 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
         }
     };
 
-    console.log("shipiing and checkout data : ", shippingData, checkoutData);
-
     useEffect(() => {
         if (cartProductDetails.cartItemsDetails?.length === 0) {
             dispatch(getCartProductList(1));
-            // let list = JSON.parse(
-            //     localStorage.getItem("userSelectedProductList") || ""
-            // );
-            // if (list?.length > 0) {
-            //     dispatch(restoreUserSelectedProductList(list));
-            // } else {
-            //     router.push("/");
-            // }
         }
-        // if (reduxProductDetail?.cartProductDetails?.length === 0) {
-        //   let list: userCartProductType[] = JSON.parse(
-        //     localStorage.getItem('userSelectedProductList') || ''
-        //   );
-        //   if (list?.length > 0) {
-        //     dispatch(restoreUserSelectedProductList(list));
-        //   } else {
-        //     router.push('/');
-        //   }
-        // }
     });
 
     useEffect(() => {
@@ -174,15 +146,7 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
         else return false;
     };
     useEffect(() => {
-        console.log(
-            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA inside change of shipping or checkout : ",
-            shippingData,
-            checkoutData
-        );
         if (shippingData.shippingId !== 0 && checkoutData.checkoutId !== 0) {
-            console.log(
-                "BBBBBBBBBBBBBBBBBBBBBBBBBBBB inside condition not zero both :: "
-            );
             let payload: cartProductListsType = cartProductDetails;
             payload = {
                 ...payload,
@@ -192,8 +156,6 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
                 ...payload,
                 checkoutId: checkoutData.checkoutId,
             };
-            // cartProductDetails.shippingId = shippingData.shippingId;
-            // cartProductDetails.checkoutId = checkoutData.checkoutId;
             dispatch(addOrderDetails(payload));
             dispatch(resetShippingDetails());
             dispatch(resetPaymentDetails());
@@ -203,7 +165,6 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
 
     const handleClick = () => {
         if (isValidate()) {
-            // dispatch(setPaymentDetails(paymentData));
             dispatch(addCheckoutDetails(paymentData));
             router.push("/confirmation");
         }

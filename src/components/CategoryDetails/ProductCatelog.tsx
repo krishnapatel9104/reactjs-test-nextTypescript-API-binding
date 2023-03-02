@@ -2,8 +2,6 @@ import { Box, Grid, Pagination, Typography } from "@mui/material";
 import Image from "next/image";
 import React from "react";
 import { productsType } from "../../types/constants/products.type";
-import { checkoutNewArrivalProductLists } from "../../data/checkoutNewArrivalProductLists";
-import { url } from "inspector";
 
 interface ProductCatelogProps {
     count: number;
@@ -15,8 +13,6 @@ interface ProductCatelogProps {
     filterCategoryData: productsType[];
     handleProductClick: (productDetail: productsType) => void;
     totalCount: number;
-    // indexOfLastRecord: number;
-    // indexOfFirstRecord: number;
 }
 const ProductCatelog: React.FC<ProductCatelogProps> = ({
     count,
@@ -25,8 +21,6 @@ const ProductCatelog: React.FC<ProductCatelogProps> = ({
     filterCategoryData,
     handleProductClick,
     totalCount,
-    // indexOfFirstRecord,
-    // indexOfLastRecord,
 }) => {
     return (
         <>
@@ -78,275 +72,155 @@ const ProductCatelog: React.FC<ProductCatelogProps> = ({
                 >
                     <Grid container columnSpacing={2}>
                         {filterCategoryData?.length > 0 ? (
-                            filterCategoryData
-                                // .slice(indexOfFirstRecord, indexOfLastRecord)
-                                .map((product) => {
-                                    return (
-                                        // <Grid
-                                        //   item
-                                        //   key={product.id}
-                                        //   sm={6}
-                                        //   lg={4}
-                                        //   sx={{
-                                        //     position: 'relative'
-                                        //   }}>
-                                        //   <Box
-                                        //     sx={{
-                                        //       display: 'flex',
-                                        //       justifyContent: 'center',
-                                        //       alignItems: 'center'
-                                        //     }}>
-                                        //     <Image
-                                        //       src={product.productImages[0].productImage}
-                                        //       alt="imageGirl"
-                                        //       height={0}
-                                        //       width={0}
-                                        //       sizes="(max-width:0) 100vw"
-                                        //       style={{
-                                        //         height: '100%',
-                                        //         width: '100%'
-                                        //       }}
-                                        //       onClick={e => handleProductClick(product)}
-                                        //     />
-                                        //   </Box>
-                                        //   {checkoutNewArrivalProductLists.productId.includes(product.id) && (
-                                        //     <Box
-                                        //       sx={{
-                                        //         backgroundColor: '#111827',
-                                        //         width: 'fit-content',
-                                        //         padding: '2px 10px',
-                                        //         position: 'absolute',
-                                        //         top: '0%'
-                                        //       }}>
-                                        //       <Typography
-                                        //         sx={{
-                                        //           fontFamily: 'Jost',
-                                        //           fontWeight: '400',
-                                        //           fontSize: '12px',
-                                        //           color: '#FFFFFF'
-                                        //         }}>
-                                        //         New Arrivals
-                                        //       </Typography>
-                                        //     </Box>
-                                        //   )}
-                                        //   <Box
-                                        //     sx={{
-                                        //       background: 'rgba(0, 0, 0, 0.3)',
-                                        //       width: 'fit-content',
-                                        //       padding: '5px 8px',
-                                        //       position: 'absolute',
-                                        //       paddingTop: '10px',
-                                        //       top: '3%',
-                                        //       right: 0
-                                        //     }}>
-                                        //     <Image
-                                        //       src={'/images/whitelike.png'}
-                                        //       alt="productimg"
-                                        //       width={25}
-                                        //       height={22}
-                                        //     />
-                                        //   </Box>
-
-                                        //   <Box
-                                        //     sx={{
-                                        //       padding: '10px',
-                                        //       display: 'flex',
-                                        //       justifyContent: 'space-between'
-                                        //     }}>
-                                        //     <Box
-                                        //       sx={{
-                                        //         display: 'flex',
-                                        //         justifyContent: 'space-between',
-                                        //         alignItems: 'flex-end'
-                                        //       }}>
-                                        //       <Typography
-                                        //         sx={{
-                                        //           width: '80%',
-                                        //           fontFamily: 'Inter',
-                                        //           fontWeight: '400',
-                                        //           fontSize: '18px',
-                                        //           color: '#000000'
-                                        //         }}>
-                                        //         {product.productName}
-                                        //       </Typography>
-                                        //     </Box>
-                                        //     <Image
-                                        //       src={'/images/womenproductcart.png'}
-                                        //       alt="productimg"
-                                        //       height={22}
-                                        //       width={32}
-                                        //     />
-                                        //   </Box>
-                                        //   <Typography
-                                        //     sx={{
-                                        //       width: '80%',
-                                        //       fontFamily: 'Inter',
-                                        //       fontWeight: '400',
-                                        //       fontSize: '20px',
-                                        //       color: '#1B2437',
-                                        //       alignItems: 'flex-start'
-                                        //     }}>
-                                        //     $ {product.productCurrentPrice}
-                                        //   </Typography>
-                                        //   {/* </Box> */}
-                                        // </Grid>
-                                        <Grid
-                                            item
-                                            key={product.id}
-                                            sm={6}
-                                            lg={4}
+                            filterCategoryData.map((product) => {
+                                return (
+                                    <Grid
+                                        item
+                                        key={product.id}
+                                        sm={6}
+                                        lg={4}
+                                        sx={{
+                                            position: "relative",
+                                        }}
+                                    >
+                                        <Box
                                             sx={{
-                                                position: "relative",
+                                                height: "400px",
+                                                width: "200px",
                                             }}
                                         >
                                             <Box
                                                 sx={{
-                                                    height: "400px",
-                                                    width: "200px",
+                                                    height: "300px",
+                                                    width: "225px",
+                                                    position: "relative",
                                                 }}
                                             >
+                                                <Image
+                                                    src={
+                                                        product.productImages[0]
+                                                    }
+                                                    alt="imageGirl"
+                                                    height={0}
+                                                    width={0}
+                                                    sizes="(max-width:0) 100vw
+                                                                (max-height:0) 100vh"
+                                                    style={{
+                                                        height: "100%",
+                                                        width: "100%",
+                                                        objectFit: "cover",
+                                                        objectPosition: "top",
+                                                    }}
+                                                    onClick={(e) =>
+                                                        handleProductClick(
+                                                            product
+                                                        )
+                                                    }
+                                                />
                                                 <Box
                                                     sx={{
-                                                        height: "300px",
-                                                        width: "225px",
-                                                        position: "relative",
+                                                        background:
+                                                            "rgba(0, 0, 0, 0.3)",
+                                                        width: "fit-content",
+                                                        padding: "5px 8px",
+                                                        position: "absolute",
+                                                        paddingTop: "10px",
+                                                        top: "8%",
+                                                        right: 0,
                                                     }}
                                                 >
                                                     <Image
                                                         src={
-                                                            product
-                                                                .productImages[0]
+                                                            "/images/whitelike.png"
                                                         }
-                                                        alt="imageGirl"
-                                                        height={0}
-                                                        width={0}
-                                                        sizes="(max-width:0) 100vw
-                                                                (max-height:0) 100vh"
-                                                        style={{
-                                                            height: "100%",
-                                                            width: "100%",
-                                                            objectFit: "cover",
-                                                            objectPosition:
-                                                                "top",
-                                                        }}
-                                                        onClick={(e) =>
-                                                            handleProductClick(
-                                                                product
-                                                            )
-                                                        }
+                                                        alt="productimg"
+                                                        width={25}
+                                                        height={22}
                                                     />
+                                                </Box>
+                                                {product.type === 1 && (
                                                     <Box
                                                         sx={{
-                                                            background:
-                                                                "rgba(0, 0, 0, 0.3)",
+                                                            backgroundColor:
+                                                                "#111827",
                                                             width: "fit-content",
-                                                            padding: "5px 8px",
+                                                            padding: "2px 10px",
                                                             position:
                                                                 "absolute",
-                                                            paddingTop: "10px",
-                                                            top: "8%",
-                                                            right: 0,
+                                                            top: "0",
                                                         }}
                                                     >
-                                                        <Image
-                                                            src={
-                                                                "/images/whitelike.png"
-                                                            }
-                                                            alt="productimg"
-                                                            width={25}
-                                                            height={22}
-                                                        />
-                                                    </Box>
-                                                    {product.type === 1 && (
-                                                        <Box
-                                                            sx={{
-                                                                backgroundColor:
-                                                                    "#111827",
-                                                                width: "fit-content",
-                                                                padding:
-                                                                    "2px 10px",
-                                                                position:
-                                                                    "absolute",
-                                                                top: "0",
-                                                            }}
-                                                        >
-                                                            <Typography
-                                                                sx={{
-                                                                    fontFamily:
-                                                                        "Jost",
-                                                                    fontWeight:
-                                                                        "400",
-                                                                    fontSize:
-                                                                        "12px",
-                                                                    color: "#FFFFFF",
-                                                                }}
-                                                            >
-                                                                New Arrivals
-                                                            </Typography>
-                                                        </Box>
-                                                    )}
-                                                </Box>
-                                                <Box
-                                                    sx={{
-                                                        display: "flex",
-                                                        justifyContent:
-                                                            "space-between",
-                                                        marginTop: "10px",
-                                                        alignItems:
-                                                            "flex-start",
-                                                    }}
-                                                >
-                                                    <Box>
                                                         <Typography
                                                             sx={{
-                                                                width: "80%",
                                                                 fontFamily:
-                                                                    "Inter",
+                                                                    "Jost",
                                                                 fontWeight:
                                                                     "400",
                                                                 fontSize:
-                                                                    "18px",
-                                                                color: "#000000",
+                                                                    "12px",
+                                                                color: "#FFFFFF",
                                                             }}
                                                         >
-                                                            {
-                                                                product.productName
-                                                            }
+                                                            New Arrivals
                                                         </Typography>
                                                     </Box>
-                                                    <Box>
-                                                        <Image
-                                                            src={
-                                                                "/images/womenproductcart.png"
-                                                            }
-                                                            alt="productimg"
-                                                            height={22}
-                                                            width={32}
-                                                        />
-                                                    </Box>
-                                                </Box>
+                                                )}
+                                            </Box>
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    justifyContent:
+                                                        "space-between",
+                                                    marginTop: "10px",
+                                                    alignItems: "flex-start",
+                                                }}
+                                            >
                                                 <Box>
                                                     <Typography
                                                         sx={{
                                                             width: "80%",
                                                             fontFamily: "Inter",
                                                             fontWeight: "400",
-                                                            fontSize: "20px",
-                                                            color: "#1B2437",
-                                                            alignItems:
-                                                                "flex-start",
+                                                            fontSize: "18px",
+                                                            color: "#000000",
                                                         }}
                                                     >
-                                                        ${" "}
-                                                        {
-                                                            product.productCurrentPrice
-                                                        }
+                                                        {product.productName}
                                                     </Typography>
                                                 </Box>
+                                                <Box>
+                                                    <Image
+                                                        src={
+                                                            "/images/womenproductcart.png"
+                                                        }
+                                                        alt="productimg"
+                                                        height={22}
+                                                        width={32}
+                                                    />
+                                                </Box>
                                             </Box>
-                                        </Grid>
-                                    );
-                                })
+                                            <Box>
+                                                <Typography
+                                                    sx={{
+                                                        width: "80%",
+                                                        fontFamily: "Inter",
+                                                        fontWeight: "400",
+                                                        fontSize: "20px",
+                                                        color: "#1B2437",
+                                                        alignItems:
+                                                            "flex-start",
+                                                    }}
+                                                >
+                                                    ${" "}
+                                                    {
+                                                        product.productCurrentPrice
+                                                    }
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                );
+                            })
                         ) : (
                             <Image
                                 src="/images/data-not-found.jpg"

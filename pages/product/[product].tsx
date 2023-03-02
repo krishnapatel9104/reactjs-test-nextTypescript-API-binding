@@ -1,6 +1,5 @@
 import React from "react";
 import { GetServerSideProps, NextPage } from "next";
-import { productLists } from "../../src/data/productLists";
 import ItemDetailView from "../../src/components/ItemDetailView/ItemDetailView";
 import { productsType } from "../../src/types/constants/products.type";
 import axios from "axios";
@@ -14,7 +13,6 @@ const ItemDetailViewPage: NextPage<itemDetailViewPageProps> = ({ product }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-    console.log("PAGEEEEEEEEEEEEEEEEEEEEEE : ", query);
     const result = (
         await axios.get(`${baseURL}/product`, {
             params: {
@@ -22,13 +20,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
             },
         })
     ).data.filterData;
-    console.log("itemview next page route result products : ", result);
-
-    // let result = productLists.find(
-    //     (productItem) =>
-    //         productItem.id ===
-    //         (typeof query.productId === "string" && parseInt(query.productId))
-    // );
     return {
         props: { product: result || [] },
     };

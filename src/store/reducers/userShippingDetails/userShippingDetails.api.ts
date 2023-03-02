@@ -5,9 +5,6 @@ import { userShippingDataType } from '../../../types/redux/userShippingDetails.t
 
 export const addShippingDetails = createAsyncThunk('api/shipping/add', async (values: userShippingDataType) => {
   values.userId = 1;
-  // console.log("api thunk get cart product : ", values);
   const response = await axios.post(`${baseURL}/shipping/add`, values)
-  // console.log("repsonse of shipping details get : ", response.data);
-
   return response.data
 })

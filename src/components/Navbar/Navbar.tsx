@@ -8,7 +8,6 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { restoreUserSelectedProductList } from "../../../src/store/reducers/userSelectedProductList/userSelectedProductList.slice";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "../../store";
@@ -24,11 +23,6 @@ const Navbar = () => {
     const matches = useMediaQuery(themes.breakpoints.down("md"));
     const router = useRouter();
     const dispatch = useDispatch();
-
-    // const productDetails = useSelector(
-    //     (state) => state.userSelectedProductListSlice
-    // );
-
     const cartProductLists = useSelector(
         (state) => state.productListsSlice.cartItemsDetails
     );
@@ -59,27 +53,8 @@ const Navbar = () => {
             });
         };
         callApi();
-
-        // if (cartProductLists?.length === 0) {
-        //     if (localStorage.getItem("userSelectedProductList")) {
-        //         let list = JSON.parse(
-        //             localStorage.getItem("userSelectedProductList") || ""
-        //         );
-        //         if (list?.length > 0) {
-        //             dispatch(restoreUserSelectedProductList(list));
-        //         }
-        //     }
-        // }
         if (cartProductLists?.length === 0) {
             dispatch(getCartProductList(1));
-            // let list = JSON.parse(
-            //     localStorage.getItem("userSelectedProductList") || ""
-            // );
-            // if (list?.length > 0) {
-            //     dispatch(restoreUserSelectedProductList(list));
-            // } else {
-            //     router.push("/");
-            // }
         }
     }, []);
     useEffect(() => {

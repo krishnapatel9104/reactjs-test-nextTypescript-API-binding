@@ -9,9 +9,9 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import React, { useState } from "react";
-import { categoryLists } from "../../data/categoryLists";
-import { brandLists } from "../../data/brandLists";
-import { sizeLists } from "../../data/sizeLists";
+import { brandType } from "../../types/constants/brand.type";
+import { categoryType } from "../../types/constants/category.type";
+import { sizeType } from "../../types/constants/size.type";
 interface FilterComponentProps {
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
@@ -22,6 +22,9 @@ interface FilterComponentProps {
     brandFilter: number[];
     categoryFilter: number[];
     sizeFilter: number[];
+    brandLists: brandType[];
+    categoryLists: categoryType[];
+    sizeLists: sizeType[];
 }
 const FilterComponent: React.FC<FilterComponentProps> = ({
     isOpen,
@@ -33,6 +36,9 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     brandFilter,
     categoryFilter,
     sizeFilter,
+    brandLists,
+    categoryLists,
+    sizeLists,
 }) => {
     const [isBrandExtend, setIsBrandExtend] = useState<boolean>(false);
     const [isCategorydExtend, setIsCategoryExtend] = useState<boolean>(false);
@@ -41,9 +47,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
         if (type === "brand") setIsBrandExtend(!isBrandExtend);
         else if (type === "category") setIsCategoryExtend(!isCategorydExtend);
     };
-
-    console.log("priceRange and priceFilter : ", priceRange, priceFilter);
-
     return (
         <>
             {isOpen ? (

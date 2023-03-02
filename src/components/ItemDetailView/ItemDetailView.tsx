@@ -5,14 +5,11 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../Navbar/Navbar";
-import { setUserSelectedProductList } from "../../store/reducers/userSelectedProductList/userSelectedProductList.slice";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import { productsType } from "../../types/constants/products.type";
-// import { sizeLists } from "../../data/sizeLists";
-// import { colorLists } from "../../data/colorLists";
-import { useSelector, useDispatch } from "../../store/index";
+import { useDispatch } from "../../store/index";
 import { ProtectedRoute } from "../../utils/ProtectedRoute";
 import SwiperSlider from "./SwiperSlider";
 import { addProductToCart } from "../../store/reducers/productDetailsLists/productLists.api";
@@ -37,17 +34,6 @@ const ItemDetailView: FC<itemDetailViewProps> = ({ product }) => {
     const [sizeLists, setSizeLists] = useState<sizeType[]>();
     const [colorLists, setColorLists] = useState<colorType[]>();
     const [value, setValue] = useState<string>("1");
-    // const userCartProductDetails = useSelector(
-    //     (state) => state.userSelectedProductListSlice
-    // );
-
-    console.log(
-        "AAAAAAAAAAA cartProductLists :: ",
-        product,
-        productDetail,
-        sizeLists,
-        colorLists
-    );
 
     useEffect(() => {
         const callApi = async () => {
@@ -87,14 +73,12 @@ const ItemDetailView: FC<itemDetailViewProps> = ({ product }) => {
 
     const handleShopNow = () => {
         let object = productObjectDetail();
-        // dispatch(setUserSelectedProductList(object));
         dispatch(addProductToCart(object));
         router.push("/shipping");
     };
 
     const handleAddToCart = () => {
         let object = productObjectDetail();
-        // dispatch(setUserSelectedProductList(object));
         dispatch(addProductToCart(object));
     };
 
@@ -122,9 +106,7 @@ const ItemDetailView: FC<itemDetailViewProps> = ({ product }) => {
                         gap: "60px",
                     }}
                 >
-                    {/* left box */}
                     <SwiperSlider productDetail={productDetail} />
-                    {/* right side */}
                     <Box
                         sx={{
                             width: { xs: "100%", md: "40%" },
@@ -320,15 +302,6 @@ const ItemDetailView: FC<itemDetailViewProps> = ({ product }) => {
                                                     if (s.id == size) return s;
                                                 }
                                             );
-                                            // console.log("size single : ", size);
-
-                                            console.log(
-                                                "sizeLists ZZZZZZZZZZZZZZ : ",
-                                                product.size,
-                                                sizeLists,
-                                                sizeDetail
-                                            );
-
                                             return (
                                                 <Button
                                                     key={index}

@@ -28,8 +28,6 @@ const SwiperSlider: React.FC<SwiperSlideProps> = ({ productDetail }) => {
     const firstNextRef = useRef(null);
 
     const changeProductImage = (item: number) => {
-        console.log("change image click : ", item);
-
         setSelectedImage(item);
     };
 
