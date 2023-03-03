@@ -1,12 +1,24 @@
 import { Box, Button, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { StepperComp } from "../../src/components/common/StepperComp";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { ProtectedRoute } from "../../src/utils/ProtectedRoute";
+import { resetPaymentDetails } from "../../src/store/reducers/userPaymentDetails/userPaymentDetails.slice";
+import { resetShippingDetails } from "../../src/store/reducers/userShippingDetails/userShippingDetails.slice";
+import { resetProductLists } from "../../src/store/reducers/productDetailsLists/productLists.slice";
+import { useDispatch } from "../../src/store";
 
 interface ConfirmationPageProps {}
 const ConfirmationPage: NextPage<ConfirmationPageProps> = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(resetShippingDetails());
+        dispatch(resetPaymentDetails());
+        dispatch(resetProductLists());
+    }, []);
+
     const router = useRouter();
     return (
         <ProtectedRoute>

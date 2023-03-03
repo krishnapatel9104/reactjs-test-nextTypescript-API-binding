@@ -12,7 +12,6 @@ import React, { useEffect, useState } from "react";
 import { StepperComp } from "../../src/components/common/StepperComp";
 import { YourOrder } from "../../src/components/common/YourOrder";
 import { useDispatch, useSelector } from "../../src/store";
-import { resetPaymentDetails } from "../../src/store/reducers/userPaymentDetails/userPaymentDetails.slice";
 import { userPaymentDetailsType } from "../../src/types/redux/userPaymentDetails.type";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -25,8 +24,6 @@ import {
     addOrderDetails,
 } from "../../src/store/reducers/userPaymentDetails/userPaymentDetails.api";
 import { cartProductListsType } from "../../src/types/redux/cartProductLists.type";
-import { resetShippingDetails } from "../../src/store/reducers/userShippingDetails/userShippingDetails.slice";
-import { resetProductLists } from "../../src/store/reducers/productDetailsLists/productLists.slice";
 
 interface CheckoutPageProps {}
 const CheckoutPage: NextPage<CheckoutPageProps> = () => {
@@ -145,11 +142,7 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
             return true;
         else return false;
     };
-    const resetRedux = () => {
-        dispatch(resetShippingDetails());
-        dispatch(resetPaymentDetails());
-        dispatch(resetProductLists());
-    };
+
     useEffect(() => {
         if (shippingData.shippingId !== 0 && checkoutData.checkoutId !== 0) {
             let payload: cartProductListsType = cartProductDetails;
@@ -162,7 +155,6 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
                 checkoutId: checkoutData.checkoutId,
             };
             dispatch(addOrderDetails(payload));
-            resetRedux();
         }
     }, [shippingData, checkoutData]);
 
