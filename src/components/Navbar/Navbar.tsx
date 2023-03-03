@@ -4,9 +4,7 @@ import Link from "next/link";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import theme from "../../theme";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
+import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -14,7 +12,7 @@ import { useDispatch, useSelector } from "../../store";
 import { brandType } from "../../types/constants/brand.type";
 import { categoryType } from "../../types/constants/category.type";
 import { genderType } from "../../types/constants/gender.type";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import baseURL from "../../api";
 import { getCartProductList } from "../../store/reducers/productDetailsLists/productLists.api";
 
@@ -30,6 +28,7 @@ const Navbar = () => {
     const [categoryLists, setCategoryLists] = useState<categoryType[]>();
     const [genderLists, setGenderLists] = useState<genderType[]>();
     const [totalItems, setTotalItems] = useState<number>(0);
+
     useEffect(() => {
         if (cartProductLists?.length > 0) {
             let total = 0;
@@ -42,9 +41,29 @@ const Navbar = () => {
 
     useEffect(() => {
         const callApi = async () => {
-            await axios.get(`${baseURL}/brand`).then((response) => {
-                setBrandLists(response.data);
-            });
+            await axios
+                .get(`${baseURL}/brand`, {
+                    headers: {
+                        Authorization: `${
+                            localStorage.getItem("token")
+                        }`,
+                    },
+                })
+                .then((response) => {
+                    setBrandLists(response.data);
+                })
+                .catch((error) => {
+                    console.log("ERROR OF AUTHOERIZATION :::::: ", error);
+                    if (error.response.status === 401) {
+                        console.log(
+                            "TOKENNNNN : ",
+                            localStorage.getItem("token")
+                        );
+                        // localStorage.removeItem("token");
+                        // localStorage.removeItem("isLoggedIn");
+                        // router.push("/login");
+                    }
+                });
             await axios.get(`${baseURL}/category`).then((response) => {
                 setCategoryLists(response.data);
             });

@@ -1,7 +1,9 @@
 import { Box, Button, TextField } from "@mui/material";
+import axios from "axios";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import baseURL from "../src/api";
 
 interface LoginPageProps {}
 const LoginPage: NextPage<LoginPageProps> = () => {
@@ -14,21 +16,38 @@ const LoginPage: NextPage<LoginPageProps> = () => {
     });
     const [error, setError] = useState("");
     const router = useRouter();
-    const handleClick = (
+    const handleClick = async (
         e: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => {
         e.preventDefault();
-        if (userData.userName === "test" && userData.password === "test123") {
+        console.log("userData : ", userData);
+
+        if (userData.userName !== "" && userData.password !== "") {
             setError("");
-            localStorage.setItem("isLoggedIn", true.toString());
-            router.push("/");
+            // localStorage.setItem("isLoggedIn", true.toString());
+            let res = (
+                await axios.post(`${baseURL}/login`, {
+                    method: "POST",
+                    body: userData
+                    ,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+            ).data;
+            console.log("res ::::login :::::: ", res);
+            if (res.auth) {
+                // localStorage.setItem("isLoggedIn", true.toString());
+                localStorage.setItem("token", res.auth);
+                router.push("/");
+            }
         } else {
             setError("Opps! Wrong Information!!!");
         }
     };
     useEffect(() => {
-        const userData = localStorage.getItem("isLoggedIn");
-        if (userData !== null && userData === true.toString()) {
+        const userData = localStorage.getItem("token");
+        if (userData !== null) {
             router.push("/");
         }
     });
