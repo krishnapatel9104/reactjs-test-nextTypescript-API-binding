@@ -17,7 +17,6 @@ interface FilterComponentProps {
     setIsOpen: (value: boolean) => void;
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     priceFilter: [number, number];
-    priceRange: [number, number];
     setPriceFilter: (e: [number, number]) => void;
     brandFilter: number[];
     categoryFilter: number[];
@@ -31,7 +30,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     setIsOpen,
     handleChange,
     priceFilter,
-    priceRange,
     setPriceFilter,
     brandFilter,
     categoryFilter,
@@ -136,25 +134,21 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                                     color: "#1F2937",
                                 }}
                             >
-                                {priceFilter[0] === 0
-                                    ? priceRange[0] - priceRange[1]
-                                    : priceFilter[0] - priceFilter[1]}
+                                {priceFilter[0] - priceFilter[1]}
                             </Typography>
                         </Box>
                         <Slider
                             sx={{
                                 color: "#EB5757",
                             }}
-                            value={
-                                priceFilter[0] === 0 ? priceRange : priceFilter
-                            }
+                            value={priceFilter}
                             onChange={(_, value) =>
                                 setPriceFilter(value as [number, number])
                             }
                             valueLabelDisplay="auto"
                             aria-labelledby="range-slider"
-                            max={2000}
-                            min={1}
+                            max={priceFilter[1]}
+                            min={priceFilter[0]}
                             name="price"
                             disableSwap
                             getAriaLabel={() => "Minimum distance"}

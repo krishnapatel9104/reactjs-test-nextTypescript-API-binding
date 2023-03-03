@@ -8,15 +8,30 @@ import { brandType } from "../../../../src/types/constants/brand.type";
 interface BrandProductPageProps {
     products: productsType[];
     totalCount?: number;
+    priceRange: [number, number];
+    gender: number;
+    brand: number;
+    type: string;
 }
 
 const BrandProductPage: NextPage<BrandProductPageProps> = ({
     products,
     totalCount,
+    priceRange,
+    gender,
+    brand,
+    type,
 }) => {
     return (
         <>
-            <CategroyDetails products={products} totalCount={totalCount} />
+            <CategroyDetails
+                products={products}
+                totalCount={totalCount}
+                priceRange={priceRange}
+                gender={gender}
+                brand={brand}
+                type={type}
+            />
         </>
     );
 };
@@ -44,6 +59,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         props: {
             products: result.filterData,
             totalCount: result.totalCount,
+            priceRange: result.priceRange,
+            gender: gender.id,
+            brand: brand.id,
+            type: "brand",
         },
     };
 };

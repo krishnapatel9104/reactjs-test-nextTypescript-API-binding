@@ -19,23 +19,37 @@ import { sizeType } from "../../types/constants/size.type";
 interface categoryDetailsProps {
     products: productsType[];
     totalCount?: number;
+    priceRange: [number, number];
+    gender: number;
+    category?: number;
+    brand?: number;
+    type: string;
 }
 const CategroyDetails: FC<categoryDetailsProps> = ({
     products,
     totalCount,
+    priceRange,
+    gender,
+    category,
+    brand,
+    type,
 }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const themes = useTheme();
     const matches = useMediaQuery(themes.breakpoints.up("md"));
     if (matches && isOpen) setIsOpen(false);
-    const [brandFilter, setBrandFilter] = useState<number[]>([]);
+    const [brandFilter, setBrandFilter] = useState<number[]>(
+        brand ? [brand] : []
+    );
     const [sizeFilter, setSizeFilter] = useState<number[]>([]);
-    const [categoryFilter, setCategoryFilter] = useState<number[]>([]);
-    const [priceFilter, setPriceFilter] = useState<[number, number]>([0, 0]);
-    const [priceRange, setPriceRange] = useState<[number, number]>([0, 0]);
-    const [selectedGender, setSelectedGender] = useState<number>();
+    const [categoryFilter, setCategoryFilter] = useState<number[]>(
+        category ? [category] : []
+    );
+    const [priceFilter, setPriceFilter] =
+        useState<[number, number]>(priceRange);
+    const [selectedGender, setSelectedGender] = useState<number>(gender);
     const [totalCounts, setTotalCounts] = useState<number>(totalCount || 0);
-    const [selectedType, setSelectedType] = useState<string>("");
+    const [selectedType, setSelectedType] = useState<string>(type);
     const [brandLists, setBrandLists] = useState<brandType[]>();
     const [categoryLists, setCategoryLists] = useState<categoryType[]>();
     const [genderLists, setGenderLists] = useState<genderType[]>();
@@ -48,6 +62,17 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
         Math.ceil(totalCount ? totalCount : 0 / PER_PAGE)
     );
     const router = useRouter();
+
+    useEffect(() => {
+        setCategoryFilter(category ? [category] : []);
+        setBrandFilter(brand ? [brand] : []);
+        setSelectedType(type);
+        setSelectedGender(gender);
+        setTotalCounts(totalCount || 0);
+        setPriceFilter(priceRange);
+        setFilterCategoryData(products);
+    }, [products, totalCount, priceRange, gender, category, type]);
+
     useEffect(() => {
         const callApi = async () => {
             await axios.get(`${baseURL}/brand`).then((response) => {
@@ -66,36 +91,6 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
         callApi();
     }, []);
 
-    useEffect(() => {
-        let curRoute = router.asPath;
-        let genderValue = curRoute.split("/")[1];
-        let object = genderLists?.find((gender) => gender.slug === genderValue);
-        if (object) setSelectedGender(object.id);
-        let brandOrCategoryType = curRoute.split("/")[3];
-        if (brandOrCategoryType) setSelectedType(brandOrCategoryType);
-        let brandOrCategoryValue = curRoute.split("/")[4];
-        if (
-            brandOrCategoryType === "category" &&
-            brandOrCategoryValue &&
-            categoryLists
-        ) {
-            let object = categoryLists.find(
-                (category) => category.slug === brandOrCategoryValue
-            );
-            if (object) setCategoryFilter([object.id]);
-        }
-        if (
-            brandOrCategoryType === "brand" &&
-            brandOrCategoryValue &&
-            brandLists
-        ) {
-            let object = brandLists.find(
-                (brand) => brand.slug === brandOrCategoryValue
-            );
-            if (object) setBrandFilter([object.id]);
-        }
-    }, [genderLists, categoryLists, brandLists]);
-
     const apiCall = async () => {
         const result = (
             await axios.get(`${baseURL}/product`, {
@@ -110,7 +105,6 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
                 },
             })
         ).data;
-        setPriceFilter([result.priceRange?.min | 0, result.priceRange?.max | 0]);
         setCount(Math.ceil(result.totalCount / PER_PAGE));
         setTotalCounts(result.totalCount);
         setFilterCategoryData(result.filterData);
@@ -123,7 +117,7 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
         ) {
             apiCall();
         }
-    }, [brandFilter, categoryFilter, sizeFilter, selectedGender]);
+    }, [brandFilter, categoryFilter, sizeFilter, priceFilter]);
 
     const handleProductClick = (productDetail: productsType) => {
         setIsOpen(!isOpen);
@@ -236,7 +230,6 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
                         setIsOpen={setIsOpen}
                         handleChange={handleChange}
                         priceFilter={priceFilter}
-                        priceRange={priceRange}
                         setPriceFilter={setPriceFilter}
                         sizeFilter={sizeFilter}
                         categoryFilter={categoryFilter}

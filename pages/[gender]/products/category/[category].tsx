@@ -8,17 +8,29 @@ import { categoryType } from "../../../../src/types/constants/category.type";
 interface CategoryProductPageProps {
     products: productsType[];
     totalCount?: number;
+    priceRange: [number, number];
+    gender: number;
+    category: number;
+    type: string;
 }
 
 const CategoryProductPage: NextPage<CategoryProductPageProps> = ({
     products,
     totalCount,
+    priceRange,
+    gender,
+    category,
+    type,
 }) => {
     return (
         <>
             <CategroyDetails
                 products={products}
                 totalCount={totalCount}
+                priceRange={priceRange}
+                gender={gender}
+                category={category}
+                type={type}
             />
         </>
     );
@@ -47,6 +59,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         props: {
             products: result.filterData,
             totalCount: result.totalCount,
+            priceRange:
+                result.priceRange[0] === null ? [200, 500] : result.priceRange,
+            gender: gender.id,
+            category: category.id,
+            type: "category",
         },
     };
 };
