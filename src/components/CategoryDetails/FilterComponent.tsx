@@ -134,7 +134,8 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                                     color: "#1F2937",
                                 }}
                             >
-                                {priceFilter[0] - priceFilter[1]}
+                                ${priceFilter[0]}-$
+                                {priceFilter[1]}
                             </Typography>
                         </Box>
                         <Slider
@@ -147,8 +148,8 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                             }
                             valueLabelDisplay="auto"
                             aria-labelledby="range-slider"
-                            max={priceFilter[1]}
-                            min={priceFilter[0]}
+                            max={2000}
+                            min={1}
                             name="price"
                             disableSwap
                             getAriaLabel={() => "Minimum distance"}

@@ -57,9 +57,6 @@ const Navbar = () => {
             dispatch(getCartProductList(1));
         }
     }, []);
-    useEffect(() => {
-        setIsOpen(false);
-    }, [router.asPath]);
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -73,6 +70,11 @@ const Navbar = () => {
         { id: 6, value: "Shoes" },
         { id: 7, value: "Suits" },
     ];
+
+    useEffect(() => {
+        setIsOpen(false);
+        setIsMobile(false);
+    }, [router.asPath]);
 
     if (matches && isOpen) setIsOpen(false);
     const handleClick = () => {

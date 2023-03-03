@@ -52,7 +52,6 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
     const [selectedType, setSelectedType] = useState<string>(type);
     const [brandLists, setBrandLists] = useState<brandType[]>();
     const [categoryLists, setCategoryLists] = useState<categoryType[]>();
-    const [genderLists, setGenderLists] = useState<genderType[]>();
     const [sizeLists, setSizeLists] = useState<sizeType[]>();
     const [filterCategoryData, setFilterCategoryData] =
         useState<productsType[]>(products);
@@ -80,9 +79,6 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
             });
             await axios.get(`${baseURL}/category`).then((response) => {
                 setCategoryLists(response.data);
-            });
-            await axios.get(`${baseURL}/gender`).then((response) => {
-                setGenderLists(response.data);
             });
             await axios.get(`${baseURL}/size`).then((response) => {
                 setSizeLists(response.data);

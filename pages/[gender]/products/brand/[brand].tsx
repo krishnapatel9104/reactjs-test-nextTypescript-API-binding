@@ -59,7 +59,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         props: {
             products: result.filterData,
             totalCount: result.totalCount,
-            priceRange: result.priceRange,
+            priceRange:
+                result.priceRange[0] === null ? [200, 500] : result.priceRange,
             gender: gender.id,
             brand: brand.id,
             type: "brand",

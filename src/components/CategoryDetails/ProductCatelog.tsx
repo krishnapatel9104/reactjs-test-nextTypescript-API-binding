@@ -70,7 +70,7 @@ const ProductCatelog: React.FC<ProductCatelogProps> = ({
                         objectFit: "contain",
                     }}
                 >
-                    <Grid container columnSpacing={2}>
+                    <Grid container columnSpacing={10}>
                         {filterCategoryData?.length > 0 ? (
                             filterCategoryData.map((product) => {
                                 return (
@@ -227,6 +227,7 @@ const ProductCatelog: React.FC<ProductCatelogProps> = ({
                                 alt="data not found"
                                 height={300}
                                 width={300}
+                                style={{ marginLeft: "50px" }}
                             />
                         )}
                     </Grid>
