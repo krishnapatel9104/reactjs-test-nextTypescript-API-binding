@@ -21,6 +21,7 @@ export interface cartProductListsType {
   userId?: number
   shippingId?: number
   checkoutId?: number
+  token: string
 }
 
 export interface getCartProductType {

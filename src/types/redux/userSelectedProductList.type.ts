@@ -9,6 +9,7 @@ export interface userCartProductType {
   size: number
   color: number
   cartId?: number
+  token?: string
 }
 
 export interface updateCartProductType {
@@ -16,4 +17,5 @@ export interface updateCartProductType {
   quantity?: string
   size?: number
   color?: number
+  token?:string
 }

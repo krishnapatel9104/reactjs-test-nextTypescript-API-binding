@@ -61,12 +61,15 @@ const ItemDetailView: FC<itemDetailViewProps> = ({ product }) => {
     };
 
     const productObjectDetail = () => {
+        let token = !localStorage.getItem("token")
+            ? ""
+            : JSON.parse(localStorage.getItem("token") || "");
         let addProductToCartObject = {
             productId: productDetail?.id,
             quantity: 1,
             size: selectedSize,
             color: selectedColor,
-            userId: 1,
+            token: token,
         };
         return addProductToCartObject;
     };

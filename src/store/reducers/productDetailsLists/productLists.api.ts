@@ -4,21 +4,47 @@ import baseURL from '../../../api';
 import { updateCartProductType, userCartProductType } from '../../../types/redux/userSelectedProductList.type';
 
 export const addProductToCart = createAsyncThunk('api/cart/add', async (productDetails: userCartProductType) => {
-  const response = await axios.post(`${baseURL}/cart/add`, productDetails)
+  let method = 'POST'
+  let url = `${baseURL}/cart/add`
+  let data = productDetails
+  let headers = {
+    "Authorization": `Bearer ${productDetails.token}`,
+    "Content-Type": "application/json",
+  }
+  let response = await axios({ method, url, headers, data })
   return response.data
 })
 
 export const updateProductToCart = createAsyncThunk('api/cart', async (productDetails: updateCartProductType) => {
-  const response = await axios.put(`${baseURL}/cart`, productDetails)
+  let method = 'PUT'
+  let url = `${baseURL}/cart`
+  let data = productDetails
+  let headers = {
+    "Authorization": `Bearer ${productDetails.token}`,
+    "Content-Type": "application/json",
+  }
+  let response = await axios({ method, url, headers, data })
   return response.data
 })
 
-export const deleteProductToCart = createAsyncThunk('api/cart/:id', async (id: number) => {
-  const response = await axios.delete(`${baseURL}/cart/` + id)
+export const deleteProductToCart = createAsyncThunk('api/cart/:id', async (details: { productId: number, token: string }) => {
+  let method = 'DELETE'
+  let url = `${baseURL}/cart/${details.productId}`
+  let headers = {
+    "Authorization": `Bearer ${details.token}`,
+    "Content-Type": "application/json",
+  }
+  let response = await axios({ method, url, headers })
   return response.data
 })
 
-export const getCartProductList = createAsyncThunk('api/cart', async (id: number) => {
-  const response = await axios.get(`${baseURL}/cart/` + id)
+export const getCartProductList = createAsyncThunk('api/cart', async (token: string) => {
+  let method = 'GET'
+  let url = `${baseURL}/cart`
+  let headers = {
+    "Authorization": `Bearer ${token}`,
+    "Content-Type": "application/json",
+  }
+  let response = await axios({ method, url, headers })
   return response.data
 })

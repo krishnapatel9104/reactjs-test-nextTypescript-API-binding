@@ -6,14 +6,28 @@ import { userPaymentDetailsType } from '../../../types/redux/userPaymentDetails.
 import { userCartProductsType } from '../../../types/redux/userSelectedProductList.type';
 import { cartProductListsType } from '../../../types/redux/cartProductLists.type';
 
-export const addCheckoutDetails = createAsyncThunk('api/checkout/add', async (values: userPaymentDetailsType) => {
-  values.userId = 1;
-  const response = await axios.post(`${baseURL}/checkout/add`, values)
+export const addCheckoutDetails = createAsyncThunk('api/checkout/add', async (details: { values: userPaymentDetailsType, token: string }) => {
+
+  let method = 'POST'
+  let url = `${baseURL}/checkout/add`
+  let data = details.values
+  let headers = {
+    "Authorization": `Bearer ${details.token}`,
+    "Content-Type": "application/json",
+  }
+  let response = await axios({ method, url, headers, data })
   return response.data
 })
 
 export const addOrderDetails = createAsyncThunk('api/orderDetail/add', async (cartDetailsObject: cartProductListsType) => {
-  cartDetailsObject.userId = 1;
-  const response = await axios.post(`${baseURL}/orderDetail/add`, cartDetailsObject)
+
+  let method = 'POST'
+  let url = `${baseURL}/orderDetail/add`
+  let data = cartDetailsObject
+  let headers = {
+    "Authorization": `Bearer ${cartDetailsObject.token}`,
+    "Content-Type": "application/json",
+  }
+  let response = await axios({ method, url, headers, data })
   return response.data
 })

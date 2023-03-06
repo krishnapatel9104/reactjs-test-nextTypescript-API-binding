@@ -6,7 +6,6 @@ export const ProtectedRoute = (props: any) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const checkUserToken = () => {
     const userData = localStorage.getItem("token");
-    console.log("userData : ",userData);
     if (userData === null) {
       setIsLoggedIn(false);
       return router.push("/login");

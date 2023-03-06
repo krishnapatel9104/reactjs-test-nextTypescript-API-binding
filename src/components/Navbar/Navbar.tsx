@@ -39,31 +39,15 @@ const Navbar = () => {
         }
     }, [cartProductLists]);
 
+    let token = !localStorage.getItem("token")
+        ? ""
+        : JSON.parse(localStorage.getItem("token") || "");
+
     useEffect(() => {
         const callApi = async () => {
-            await axios
-                .get(`${baseURL}/brand`, {
-                    headers: {
-                        Authorization: `${
-                            localStorage.getItem("token")
-                        }`,
-                    },
-                })
-                .then((response) => {
-                    setBrandLists(response.data);
-                })
-                .catch((error) => {
-                    console.log("ERROR OF AUTHOERIZATION :::::: ", error);
-                    if (error.response.status === 401) {
-                        console.log(
-                            "TOKENNNNN : ",
-                            localStorage.getItem("token")
-                        );
-                        // localStorage.removeItem("token");
-                        // localStorage.removeItem("isLoggedIn");
-                        // router.push("/login");
-                    }
-                });
+            await axios.get(`${baseURL}/brand`).then((response) => {
+                setBrandLists(response.data);
+            });
             await axios.get(`${baseURL}/category`).then((response) => {
                 setCategoryLists(response.data);
             });
@@ -73,7 +57,7 @@ const Navbar = () => {
         };
         callApi();
         if (cartProductLists?.length === 0) {
-            dispatch(getCartProductList(1));
+            dispatch(getCartProductList(token));
         }
     }, []);
 

@@ -20,25 +20,11 @@ const LoginPage: NextPage<LoginPageProps> = () => {
         e: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => {
         e.preventDefault();
-        console.log("userData : ", userData);
-
         if (userData.userName !== "" && userData.password !== "") {
             setError("");
-            // localStorage.setItem("isLoggedIn", true.toString());
-            let res = (
-                await axios.post(`${baseURL}/login`, {
-                    method: "POST",
-                    body: userData
-                    ,
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
-            ).data;
-            console.log("res ::::login :::::: ", res);
+            let res = (await axios.post(`${baseURL}/login`, userData)).data;
             if (res.auth) {
-                // localStorage.setItem("isLoggedIn", true.toString());
-                localStorage.setItem("token", res.auth);
+                localStorage.setItem("token", JSON.stringify(res.auth));
                 router.push("/");
             }
         } else {

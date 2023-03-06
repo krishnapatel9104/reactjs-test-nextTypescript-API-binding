@@ -32,7 +32,10 @@ const ShippingPage: NextPage<ShippingPageProps> = () => {
     );
     useEffect(() => {
         if (cartProductDetails?.length === 0) {
-            dispatch(getCartProductList(1));
+            let token = !localStorage.getItem("token")
+                ? ""
+                : JSON.parse(localStorage.getItem("token") || "");
+            dispatch(getCartProductList(token));
         }
     });
 
@@ -93,7 +96,17 @@ const ShippingPage: NextPage<ShippingPageProps> = () => {
                                 zipCode: "",
                             }}
                             onSubmit={(values: userShippingDataType) => {
-                                dispatch(addShippingDetails(values));
+                                let token = !localStorage.getItem("token")
+                                    ? ""
+                                    : JSON.parse(
+                                          localStorage.getItem("token") || ""
+                                      );
+                                dispatch(
+                                    addShippingDetails({
+                                        values: values,
+                                        token: token,
+                                    })
+                                );
                                 router.push("/checkout");
                             }}
                             validationSchema={Yup.object().shape({

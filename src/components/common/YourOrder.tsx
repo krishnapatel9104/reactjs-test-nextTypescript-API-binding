@@ -29,7 +29,8 @@ export const YourOrder: React.FC<YourOrderProps> = ({ isCheckout }) => {
     const dispatch = useDispatch();
     const [sizeLists, setSizeLists] = useState<sizeType[]>();
     const [colorLists, setColorLists] = useState<colorType[]>();
-    const [productDetails, setProductDetails] = useState<getCartProductType[]>();
+    const [productDetails, setProductDetails] =
+        useState<getCartProductType[]>();
 
     useEffect(() => {
         const callApi = async () => {
@@ -48,6 +49,10 @@ export const YourOrder: React.FC<YourOrderProps> = ({ isCheckout }) => {
     );
     const totalInfo = useSelector((state) => state.productListsSlice.totalInfo);
 
+    let token = !localStorage.getItem("token")
+        ? ""
+        : JSON.parse(localStorage.getItem("token") || "");
+
     useEffect(() => {
         if (reduxProductDetails.length > 0) {
             const callApi = async () => {
@@ -65,26 +70,37 @@ export const YourOrder: React.FC<YourOrderProps> = ({ isCheckout }) => {
     }, [reduxProductDetails]);
 
     const handleClick = (id: number) => {
-        dispatch(deleteProductToCart(id));
+        dispatch(deleteProductToCart({ productId: id, token: token }));
     };
     const handleQuantityChange = (
         identifier: string,
         id: number | undefined
     ) => {
+        let token = !localStorage.getItem("token")
+            ? ""
+            : JSON.parse(localStorage.getItem("token") || "");
         if (identifier === "add" && id) {
-            dispatch(updateProductToCart({ id: id, quantity: "add" }));
+            dispatch(
+                updateProductToCart({ id: id, quantity: "add", token: token })
+            );
         }
         if (identifier === "less" && id) {
-            dispatch(updateProductToCart({ id: id, quantity: "less" }));
+            dispatch(
+                updateProductToCart({ id: id, quantity: "less", token: token })
+            );
         }
     };
     const handleChange = (e: SelectChangeEvent<number>, id: number) => {
         const { name, value } = e.target;
+        let token = !localStorage.getItem("token")
+            ? ""
+            : JSON.parse(localStorage.getItem("token") || "");
         if (name === "size" && id) {
             dispatch(
                 updateProductToCart({
                     id: id,
                     size: typeof value === "string" ? parseInt(value) : value,
+                    token: token,
                 })
             );
         }
@@ -93,6 +109,7 @@ export const YourOrder: React.FC<YourOrderProps> = ({ isCheckout }) => {
                 updateProductToCart({
                     id: id,
                     color: typeof value === "string" ? parseInt(value) : value,
+                    token: token,
                 })
             );
         }
@@ -157,6 +174,7 @@ export const YourOrder: React.FC<YourOrderProps> = ({ isCheckout }) => {
                                         }}
                                     >
                                         {order?.products.productName}
+                                        {order?.id}
                                     </Box>
                                     {!isCheckout && (
                                         <Box>

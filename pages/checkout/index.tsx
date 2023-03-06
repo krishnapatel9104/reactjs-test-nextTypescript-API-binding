@@ -123,7 +123,10 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
 
     useEffect(() => {
         if (cartProductDetails.cartItemsDetails?.length === 0) {
-            dispatch(getCartProductList(1));
+            let token = !localStorage.getItem("token")
+                ? ""
+                : JSON.parse(localStorage.getItem("token") || "");
+            dispatch(getCartProductList(token));
         }
     });
 
@@ -146,13 +149,14 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
     useEffect(() => {
         if (shippingData.shippingId !== 0 && checkoutData.checkoutId !== 0) {
             let payload: cartProductListsType = cartProductDetails;
+            let token = !localStorage.getItem("token")
+                ? ""
+                : JSON.parse(localStorage.getItem("token") || "");
             payload = {
                 ...payload,
                 shippingId: shippingData.shippingId,
-            };
-            payload = {
-                ...payload,
                 checkoutId: checkoutData.checkoutId,
+                token: token,
             };
             dispatch(addOrderDetails(payload));
         }
@@ -160,7 +164,10 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
 
     const handleClick = () => {
         if (isValidate()) {
-            dispatch(addCheckoutDetails(paymentData));
+            let token = !localStorage.getItem("token")
+                ? ""
+                : JSON.parse(localStorage.getItem("token") || "");
+            dispatch(addCheckoutDetails({ values: paymentData, token: token }));
             router.push("/confirmation");
         }
     };
