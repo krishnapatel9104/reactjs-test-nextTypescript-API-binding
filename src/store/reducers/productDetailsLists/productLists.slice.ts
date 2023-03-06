@@ -12,7 +12,8 @@ const initialState: cartProductListsType = {
   },
   userId: 0,
   shippingId: 0,
-  checkoutId: 0
+  checkoutId: 0,
+  token:""
 };
 export const productListsSlice = createSlice({
   name: "userSelectedProductList",
@@ -30,7 +31,7 @@ export const productListsSlice = createSlice({
         },
         userId: 0,
         shippingId: 0,
-        checkoutId: 0
+        checkoutId: 0,
       }
     }
   },
