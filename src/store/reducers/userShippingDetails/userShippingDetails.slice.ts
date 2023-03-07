@@ -14,6 +14,12 @@ export const userShippingDetailsSlice = createSlice({
         shippingId: 0
       }
     },
+    setShippingDetails: (state: userShippingResDataType, action: PayloadAction<userShippingResDataType>) => {
+      return {
+        ...state,
+        shippingId: action.payload.shippingId
+      }
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(addShippingDetails.fulfilled, (state, action: PayloadAction<userShippingResDataType>) => {
@@ -24,5 +30,5 @@ export const userShippingDetailsSlice = createSlice({
     })
   }
 });
-export const { resetShippingDetails } = userShippingDetailsSlice.actions;
+export const { resetShippingDetails, setShippingDetails } = userShippingDetailsSlice.actions;
 export default userShippingDetailsSlice.reducer;

@@ -7,7 +7,7 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "../../src/store";
 import { StepperComp } from "../../src/components/common/StepperComp";
 import { YourOrder } from "../../src/components/common/YourOrder";
@@ -21,8 +21,12 @@ import { userShippingDataType } from "../../src/types/redux/userShippingDetails.
 import { Formik, Form, FormikProps } from "formik";
 import * as Yup from "yup";
 import { getCartProductList } from "../../src/store/reducers/productDetailsLists/productLists.api";
-import { addShippingDetails } from "../../src/store/reducers/userShippingDetails/userShippingDetails.api";
+import {
+    addShippingDetails,
+    getShippingDetails,
+} from "../../src/store/reducers/userShippingDetails/userShippingDetails.api";
 import { setProductDetails } from "../../src/store/reducers/productDetailsLists/productLists.slice";
+import { setShippingDetails } from "../../src/store/reducers/userShippingDetails/userShippingDetails.slice";
 
 interface ShippingPageProps {}
 const ShippingPage: NextPage<ShippingPageProps> = () => {
@@ -31,24 +35,52 @@ const ShippingPage: NextPage<ShippingPageProps> = () => {
     const cartProductDetails = useSelector(
         (state) => state.productListsSlice.cartItemsDetails
     );
+
+    const gettoken = () => {
+        let token = !localStorage.getItem("token")
+            ? ""
+            : JSON.parse(localStorage.getItem("token") || "");
+        return token;
+    };
     useEffect(() => {
         const apiCall = async () => {
             if (cartProductDetails?.length === 0) {
-                let token = !localStorage.getItem("token")
-                    ? ""
-                    : JSON.parse(localStorage.getItem("token") || "");
+                let token = gettoken();
                 const res = await dispatch(getCartProductList(token));
                 if (getCartProductList.fulfilled.match(res)) {
                     if (res.payload.cartItemsDetails.length > 0) {
                         await dispatch(setProductDetails(res.payload));
-                    } else {
-                        router.push("/");
+                    }else{
+                        router.push('/')
                     }
                 }
             }
         };
         apiCall();
-    });
+    }, []);
+
+    useEffect(() => {
+        const callApi = async () => {
+            if (cartProductDetails.length > 0) {
+                let token = gettoken();
+                const res = await dispatch(
+                    getShippingDetails({
+                        token: token,
+                        cartId: cartProductDetails[0].cartId,
+                    })
+                );
+                if (getShippingDetails.fulfilled.match(res)) {
+                    if (res.payload.shippingId !== 0) {
+                        await dispatch(setShippingDetails(res.payload));
+                        router.push("/checkout");
+                    }
+                }
+            }else{
+                router.push('/')
+            }
+        };
+        callApi();
+    }, [cartProductDetails]);
 
     return (
         <ProtectedRoute>
@@ -101,14 +133,15 @@ const ShippingPage: NextPage<ShippingPageProps> = () => {
                                 city: "0",
                                 address: "",
                                 zipCode: "",
+                                cartId: 0,
                             }}
-                            onSubmit={(values: userShippingDataType) => {
-                                let token = !localStorage.getItem("token")
-                                    ? ""
-                                    : JSON.parse(
-                                          localStorage.getItem("token") || ""
-                                      );
-                                dispatch(
+                            onSubmit={async (values: userShippingDataType) => {
+                                let token = gettoken();
+                                values = {
+                                    ...values,
+                                    cartId: cartProductDetails[0].cartId,
+                                };
+                                await dispatch(
                                     addShippingDetails({
                                         values: values,
                                         token: token,

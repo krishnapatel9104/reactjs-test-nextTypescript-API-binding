@@ -8,7 +8,7 @@ export interface userShippingDataType {
   city: string
   address: string
   zipCode: string
-  userId?: number
+  cartId: number
 }
 
 export interface userShippingResDataType {

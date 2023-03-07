@@ -12,9 +12,12 @@ import { useDispatch, useSelector } from "../../store";
 import { brandType } from "../../types/constants/brand.type";
 import { categoryType } from "../../types/constants/category.type";
 import { genderType } from "../../types/constants/gender.type";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios from "axios";
 import baseURL from "../../api";
 import { getCartProductList } from "../../store/reducers/productDetailsLists/productLists.api";
+import { resetShippingDetails } from "../../store/reducers/userShippingDetails/userShippingDetails.slice";
+import { resetPaymentDetails } from "../../store/reducers/userPaymentDetails/userPaymentDetails.slice";
+import { resetProductLists } from "../../store/reducers/productDetailsLists/productLists.slice";
 
 const Navbar = () => {
     const themes = useTheme();
@@ -102,8 +105,11 @@ const Navbar = () => {
 
     const handleLogin = () => {
         localStorage.removeItem("token");
+        dispatch(resetShippingDetails());
+        dispatch(resetPaymentDetails());
+        dispatch(resetProductLists());
         router.push("/login");
-    }
+    };
     if (!brandLists || !categoryLists || !genderLists) return <></>;
 
     return (

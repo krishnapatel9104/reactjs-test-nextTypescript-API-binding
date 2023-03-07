@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { userPaymentDetailsType, userPaymentDetailsResType } from "../../../types/redux/userPaymentDetails.type";
-import { addCheckoutDetails } from "./userPaymentDetails.api";
+import { userPaymentDetailsResType } from "../../../types/redux/userPaymentDetails.type";
+import { addCheckoutDetails, getCheckoutDetails } from "./userPaymentDetails.api";
 const initialState: userPaymentDetailsResType = {
   checkoutId: 0
 };
@@ -14,12 +14,21 @@ export const userPaymentDetailsSlice = createSlice({
         checkoutId: 0
       }
     },
+    setCheckoutDetails: (state: userPaymentDetailsResType, action: PayloadAction<userPaymentDetailsResType>) => {
+      return {
+        ...state,
+        checkoutId: action.payload.checkoutId
+      }
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(addCheckoutDetails.fulfilled, (state, action: PayloadAction<userPaymentDetailsResType>) => {
       state.checkoutId = action.payload.checkoutId
     })
+    builder.addCase(getCheckoutDetails.fulfilled, (state, action: PayloadAction<userPaymentDetailsResType>) => {
+      state.checkoutId = action.payload.checkoutId
+    })
   }
 });
-export const { resetPaymentDetails } = userPaymentDetailsSlice.actions;
+export const { resetPaymentDetails, setCheckoutDetails } = userPaymentDetailsSlice.actions;
 export default userPaymentDetailsSlice.reducer;

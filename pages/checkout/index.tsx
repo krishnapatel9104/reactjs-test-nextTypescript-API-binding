@@ -22,10 +22,11 @@ import { getCartProductList } from "../../src/store/reducers/productDetailsLists
 import {
     addCheckoutDetails,
     addOrderDetails,
+    getCheckoutDetails,
 } from "../../src/store/reducers/userPaymentDetails/userPaymentDetails.api";
 import { cartProductListsType } from "../../src/types/redux/cartProductLists.type";
-import { getShippingDetails } from "../../src/store/reducers/userShippingDetails/userShippingDetails.api";
 import { setProductDetails } from "../../src/store/reducers/productDetailsLists/productLists.slice";
+import { setCheckoutDetails } from "../../src/store/reducers/userPaymentDetails/userPaymentDetails.slice";
 
 interface CheckoutPageProps {}
 const CheckoutPage: NextPage<CheckoutPageProps> = () => {
@@ -45,12 +46,25 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
         cardNumber: "",
         expiration: "",
         cvvCode: 0,
+        cartId: 0,
     });
+
     const cartProductDetails = useSelector((state) => state.productListsSlice);
 
-    const shippingData = useSelector((state) => state.userShippingDetailsSlice);
+    const shippingId = useSelector(
+        (state) => state.userShippingDetailsSlice.shippingId
+    );
 
-    const checkoutData = useSelector((state) => state.userPaymentDetailsSlice);
+    const checkoutId = useSelector(
+        (state) => state.userPaymentDetailsSlice.checkoutId
+    );
+
+    const gettoken = () => {
+        let token = !localStorage.getItem("token")
+            ? ""
+            : JSON.parse(localStorage.getItem("token") || "");
+        return token;
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -122,18 +136,14 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
             }
         }
     };
-
     useEffect(() => {
         const apiCall = async () => {
-            if (cartProductDetails.cartItemsDetails?.length === 0) {
-                let token = !localStorage.getItem("token")
-                    ? ""
-                    : JSON.parse(localStorage.getItem("token") || "");
+            if (cartProductDetails.cartItemsDetails.length === 0) {
+                let token = gettoken();
                 const res = await dispatch(getCartProductList(token));
                 if (getCartProductList.fulfilled.match(res)) {
                     if (res.payload.cartItemsDetails.length > 0) {
                         await dispatch(setProductDetails(res.payload));
-                        await dispatch(getShippingDetails(token));
                     } else {
                         router.push("/");
                     }
@@ -141,7 +151,37 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
             }
         };
         apiCall();
-    });
+    }, []);
+
+    useEffect(() => {
+        const getDetailsApiCall = async () => {
+            if (cartProductDetails.cartItemsDetails.length > 0) {
+                if (shippingId !== 0) {
+                    let token = gettoken();
+                    const checkoutRes = await dispatch(
+                        getCheckoutDetails({
+                            token: token,
+                            cartId: cartProductDetails.cartItemsDetails[0]
+                                .cartId,
+                        })
+                    );
+                    if (getCheckoutDetails.fulfilled.match(checkoutRes)) {
+                        if (checkoutRes.payload.checkoutId !== 0) {
+                            await dispatch(
+                                setCheckoutDetails(checkoutRes.payload)
+                            );
+                            router.push("/confirmation");
+                        }
+                    }
+                } else {
+                    router.push("/shipping");
+                }
+            } else {
+                router.push("/");
+            }
+        };
+        getDetailsApiCall();
+    }, [cartProductDetails.cartItemsDetails]);
 
     const isValidate = () => {
         if (
@@ -156,26 +196,23 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
     };
 
     useEffect(() => {
-        if (shippingData.shippingId !== 0 && checkoutData.checkoutId !== 0) {
+        if (shippingId !== 0 && checkoutId !== 0) {
             let payload: cartProductListsType = cartProductDetails;
-            let token = !localStorage.getItem("token")
-                ? ""
-                : JSON.parse(localStorage.getItem("token") || "");
+            let token = gettoken();
             payload = {
                 ...payload,
-                shippingId: shippingData.shippingId,
-                checkoutId: checkoutData.checkoutId,
+                shippingId: shippingId,
+                checkoutId: checkoutId,
                 token: token,
             };
             dispatch(addOrderDetails(payload));
+            router.push("/confirmation");
         }
-    }, [shippingData, checkoutData]);
+    }, [checkoutId]);
 
     const handleClick = () => {
         if (isValidate()) {
-            let token = !localStorage.getItem("token")
-                ? ""
-                : JSON.parse(localStorage.getItem("token") || "");
+            let token = gettoken();
             dispatch(addCheckoutDetails({ values: paymentData, token: token }));
             router.push("/confirmation");
         }

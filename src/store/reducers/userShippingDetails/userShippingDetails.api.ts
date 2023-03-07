@@ -15,13 +15,13 @@ export const addShippingDetails = createAsyncThunk('api/shipping/add', async (de
   return response.data
 })
 
-export const getShippingDetails = createAsyncThunk('api/shipping', async (token: string) => {
+export const getShippingDetails = createAsyncThunk('api/shipping', async (details: { token: string, cartId: number }) => {
   let method = 'GET'
-  let url = `${baseURL}/shipping`
+  let url = `${baseURL}/shipping/${details.cartId}`
   let headers = {
-    "Authorization": `Bearer ${token}`,
+    "Authorization": `Bearer ${details.token}`,
     "Content-Type": "application/json",
   }
-  let response = await axios({ method, url, headers})
+  let response = await axios({ method, url, headers })
   return response.data
 })

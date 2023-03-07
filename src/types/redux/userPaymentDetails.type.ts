@@ -4,7 +4,7 @@ export interface userPaymentDetailsType {
   cardNumber: string
   expiration: string
   cvvCode: number
-  userId?: number
+  cartId: number
 }
 
 export interface userPaymentDetailsResType {
