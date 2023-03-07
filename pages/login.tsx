@@ -22,13 +22,15 @@ const LoginPage: NextPage<LoginPageProps> = () => {
         e.preventDefault();
         if (userData.userName !== "" && userData.password !== "") {
             setError("");
-            let res = (await axios.post(`${baseURL}/login`, userData)).data;
-            if (res.auth) {
-                localStorage.setItem("token", JSON.stringify(res.auth));
+            try {
+                let res = await axios.post(`${baseURL}/login`, userData);
+                localStorage.setItem("token", JSON.stringify(res.data.auth));
                 router.push("/");
+            } catch (error) {
+                setError("Wrong credentials");
             }
         } else {
-            setError("Opps! Wrong Information!!!");
+            setError("Provide credentials!!!");
         }
     };
     useEffect(() => {

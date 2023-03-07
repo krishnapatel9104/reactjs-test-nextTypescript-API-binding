@@ -161,12 +161,8 @@ export const BestSeller = () => {
                                         onClick={() => {
                                             router.replace(
                                                 {
-                                                    pathname: `/product/${product.slug}`,
-                                                    query: {
-                                                        productId: product.id,
-                                                    },
+                                                    pathname: `/product/${product.id}`,
                                                 }
-                                                // `/product/${productDetail.slug}`
                                             );
                                         }}
                                     >

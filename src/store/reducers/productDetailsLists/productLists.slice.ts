@@ -13,7 +13,7 @@ const initialState: cartProductListsType = {
   userId: 0,
   shippingId: 0,
   checkoutId: 0,
-  token:""
+  token: ""
 };
 export const productListsSlice = createSlice({
   name: "userSelectedProductList",
@@ -33,6 +33,13 @@ export const productListsSlice = createSlice({
         shippingId: 0,
         checkoutId: 0,
       }
+    },
+    setProductDetails: (state: cartProductListsType, action: PayloadAction<cartProductListsType>) => {
+      return {
+        ...state,
+        cartItemsDetails: action.payload.cartItemsDetails,
+        totalInfo: action.payload.totalInfo
+      }
     }
   },
   extraReducers: (builder) => {
@@ -44,7 +51,8 @@ export const productListsSlice = createSlice({
 });
 
 export const {
-  resetProductLists
+  resetProductLists,
+  setProductDetails
 } = productListsSlice.actions;
 
 export default productListsSlice.reducer;

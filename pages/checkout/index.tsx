@@ -24,6 +24,8 @@ import {
     addOrderDetails,
 } from "../../src/store/reducers/userPaymentDetails/userPaymentDetails.api";
 import { cartProductListsType } from "../../src/types/redux/cartProductLists.type";
+import { getShippingDetails } from "../../src/store/reducers/userShippingDetails/userShippingDetails.api";
+import { setProductDetails } from "../../src/store/reducers/productDetailsLists/productLists.slice";
 
 interface CheckoutPageProps {}
 const CheckoutPage: NextPage<CheckoutPageProps> = () => {
@@ -122,17 +124,24 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
     };
 
     useEffect(() => {
-        if (cartProductDetails.cartItemsDetails?.length === 0) {
-            let token = !localStorage.getItem("token")
-                ? ""
-                : JSON.parse(localStorage.getItem("token") || "");
-            dispatch(getCartProductList(token));
-        }
+        const apiCall = async () => {
+            if (cartProductDetails.cartItemsDetails?.length === 0) {
+                let token = !localStorage.getItem("token")
+                    ? ""
+                    : JSON.parse(localStorage.getItem("token") || "");
+                const res = await dispatch(getCartProductList(token));
+                if (getCartProductList.fulfilled.match(res)) {
+                    if (res.payload.cartItemsDetails.length > 0) {
+                        await dispatch(setProductDetails(res.payload));
+                        await dispatch(getShippingDetails(token));
+                    } else {
+                        router.push("/");
+                    }
+                }
+            }
+        };
+        apiCall();
     });
-
-    useEffect(() => {
-        if (cartProductDetails.cartItemsDetails.length === 0) router.push("/");
-    }, [cartProductDetails.cartItemsDetails]);
 
     const isValidate = () => {
         if (
