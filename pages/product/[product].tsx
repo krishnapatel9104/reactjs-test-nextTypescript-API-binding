@@ -12,11 +12,11 @@ const ItemDetailViewPage: NextPage<itemDetailViewPageProps> = ({ product }) => {
     return <ItemDetailView product={product} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
     const result = (
         await axios.get(`${baseURL}/product`, {
             params: {
-                id: query.productId,
+                id: context.query.product,
             },
         })
     ).data.filterData;

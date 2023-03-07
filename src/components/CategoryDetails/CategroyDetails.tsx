@@ -115,17 +115,6 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
         }
     }, [brandFilter, categoryFilter, sizeFilter, priceFilter]);
 
-    const handleProductClick = (productDetail: productsType) => {
-        setIsOpen(!isOpen);
-        router.replace(
-            {
-                pathname: `/product/${productDetail.slug}`,
-                query: { productId: productDetail.id },
-            }
-            // `/product/${productDetail.slug}`
-        );
-    };
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let name = e.target.name;
         let value = parseInt(e.target.value);
@@ -241,9 +230,6 @@ const CategroyDetails: FC<categoryDetailsProps> = ({
                         }
                         page={page}
                         filterCategoryData={filterCategoryData}
-                        handleProductClick={(productDetail) =>
-                            handleProductClick(productDetail)
-                        }
                         totalCount={totalCounts}
                     />
                 </Box>

@@ -100,6 +100,10 @@ const Navbar = () => {
         setSelectedGender(slug);
     };
 
+    const handleLogin = () => {
+        localStorage.removeItem("token");
+        router.push("/login");
+    }
     if (!brandLists || !categoryLists || !genderLists) return <></>;
 
     return (
@@ -233,6 +237,7 @@ const Navbar = () => {
                         alt={"login"}
                         height={20}
                         width={20}
+                        onClick={handleLogin}
                     />
                     <Image
                         src={"/images/Like.png"}
@@ -581,6 +586,7 @@ const Navbar = () => {
                                     alt={"login"}
                                     height={20}
                                     width={20}
+                                    onClick={handleLogin}
                                 />
                                 <Image
                                     src={"/images/Like.png"}
