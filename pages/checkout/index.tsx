@@ -170,7 +170,6 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
                             await dispatch(
                                 setCheckoutDetails(checkoutRes.payload)
                             );
-                            router.push("/confirmation");
                         }
                     }
                 } else {
@@ -214,7 +213,6 @@ const CheckoutPage: NextPage<CheckoutPageProps> = () => {
         if (isValidate()) {
             let token = gettoken();
             dispatch(addCheckoutDetails({ values: paymentData, token: token }));
-            router.push("/confirmation");
         }
     };
 

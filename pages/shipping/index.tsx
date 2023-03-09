@@ -50,8 +50,6 @@ const ShippingPage: NextPage<ShippingPageProps> = () => {
                 if (getCartProductList.fulfilled.match(res)) {
                     if (res.payload.cartItemsDetails.length > 0) {
                         await dispatch(setProductDetails(res.payload));
-                    }else{
-                        router.push('/')
                     }
                 }
             }
@@ -75,8 +73,16 @@ const ShippingPage: NextPage<ShippingPageProps> = () => {
                         router.push("/checkout");
                     }
                 }
-            }else{
-                router.push('/')
+            } else {
+                let token = gettoken();
+                const res = await dispatch(getCartProductList(token));
+                if (getCartProductList.fulfilled.match(res)) {
+                    if (res.payload.cartItemsDetails.length > 0) {
+                        await dispatch(setProductDetails(res.payload));
+                    } else {
+                        router.push("/");
+                    }
+                }
             }
         };
         callApi();
